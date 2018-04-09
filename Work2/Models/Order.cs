@@ -33,32 +33,32 @@ namespace Work2.Models
         /// 
         [DisplayName("訂單日期")]
         [Required()]
-        public string OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         /// <summary>
         /// 需要日期
         /// </summary>
         ///
         [DisplayName("需要日期")]
         [Required()]
-        public string RequiredDate { get; set; }
+        public DateTime RequiredDate { get; set; }
         /// <summary>
         /// 發貨日期
         /// </summary>
         /// 
         [DisplayName("出貨日期")]
-        public string ShippedDate { get; set; }
+        public DateTime ShipperDate { get; set; }
         /// <summary>
-        /// 發貨編號
+        /// 發貨公司
         /// </summary>
         /// 
-        [DisplayName("發貨編號")]
+        [DisplayName("發貨公司")]
         public int ShipperID { get; set; }
         /// <summary>
-        /// 貨物
+        /// 運費
         /// </summary>
         /// 
-        [DisplayName("貨物")]
-        public string Freight { get; set; }
+        [DisplayName("運費")]
+        public decimal Freight { get; set; }
         /// <summary>
         /// 發貨地址
         /// </summary>

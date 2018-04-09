@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "SelectList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table>
+    <tr>
+        <th>訂單編號</th>
+        <th>客戶名稱</th>
+        <th>訂購日期</th>
+        <th>出貨日期</th>
+        <th>運費</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var order in @ViewBag.orderlist)
+    {
+        <tr>
+            <td>
+                @order.OrderID
+            </td>
+            <td>
+                @order.CustomerID
+            </td>
+            <td>
+                @order.OrderDate.ToString("yyyy/MM/dd")
+            </td>
+            <td>
+                @order.ShipperDate.ToString("yyyy/MM/dd")
+            </td>
+            <td>
+                @order.Freight.ToString("#,###0")
+            </td>
+            <td>
+                @Html.ActionLink("修改", "Update", new { controller = "SelectOrder", orderID = order.OrderID })
+            </td>
+            <td>
+                @Html.ActionLink("刪除", "Del", new { controller = "SelectOrder", orderID = order.OrderID })
+            </td>
+        </tr>
+    }
+</table>
+<button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回查詢頁</button>

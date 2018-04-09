@@ -14,7 +14,7 @@ namespace Work2.Models
         /// </summary>
         ///
         [DisplayName("員工編號")]
-        public int EmployeeId { get; set; }
+        public int EmployeeID { get; set; }
         /// <summary>
         /// 員工姓
         /// </summary>
