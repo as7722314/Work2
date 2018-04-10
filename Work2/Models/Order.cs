@@ -14,51 +14,51 @@ namespace Work2.Models
         /// </summary>
         ///
         [DisplayName("訂單編號")]
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
         /// <summary>
         /// 客戶編號
         /// </summary>
         /// 
         [DisplayName("客戶編號")]
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; }
         /// <summary>
         /// 員工編號
         /// </summary>
         /// 
         [DisplayName("員工編號")]
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         /// <summary>
         /// 訂單日期
         /// </summary>
         /// 
         [DisplayName("訂單日期")]
         [Required()]
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
         /// <summary>
         /// 需要日期
         /// </summary>
         ///
         [DisplayName("需要日期")]
         [Required()]
-        public DateTime RequiredDate { get; set; }
+        public DateTime? RequiredDate { get; set; }
         /// <summary>
         /// 發貨日期
         /// </summary>
         /// 
         [DisplayName("出貨日期")]
-        public DateTime ShipperDate { get; set; }
+        public DateTime? ShipperDate { get; set; }
         /// <summary>
         /// 發貨公司
         /// </summary>
         /// 
         [DisplayName("發貨公司")]
-        public int ShipperID { get; set; }
+        public int? ShipperID { get; set; }
         /// <summary>
         /// 運費
         /// </summary>
         /// 
         [DisplayName("運費")]
-        public decimal Freight { get; set; }
+        public decimal? Freight { get; set; }
         /// <summary>
         /// 發貨地址
         /// </summary>

@@ -42,9 +42,9 @@ namespace Work2.Models.Services
                 }
 
         };
-        public Order GetOrders(int id)
+        public List<Order> GetOrders(int? id)
         {
-            Order order = GetOrder.SingleOrDefault(m => m.OrderID == id);
+            List<Order> order = GetOrder.Where(m=>m.OrderID==id).ToList();
             return order;
         }
         public List<Order> GetOrderCondition(Index arg)
@@ -90,6 +90,58 @@ namespace Work2.Models.Services
         {
             Order order = GetOrder.SingleOrDefault(m => m.OrderID == orderid);
             GetOrder.Remove(order);
+        }
+        public void Update(Order order)
+        {
+            List<Order> orders = GetOrder;
+            if (order.CustomerID.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.CustomerID = order.CustomerID);
+            }
+            if (order.EmployeeID.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.EmployeeID = order.EmployeeID);
+            }
+            if (order.OrderDate.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.OrderDate = order.OrderDate);
+            }
+            if (order.RequiredDate.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.RequiredDate = order.RequiredDate);
+            }
+            if (order.ShipperDate.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipperDate = order.ShipperDate);
+            }
+            if (order.ShipperID.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipperID = order.ShipperID);
+            }
+            if (order.Freight.HasValue)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.Freight = order.Freight);
+            }
+            if (order.ShipAddress != null)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipAddress = order.ShipAddress);
+            }
+            if (order.ShipCity != null)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipCity = order.ShipCity);
+            }
+            if (order.ShipCountry != null)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipCountry = order.ShipCountry);
+            }
+            if (order.ShipRegion != null)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipRegion = order.ShipRegion);
+            }
+            if (order.CitShipPostalCodey != null)
+            {
+                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.CitShipPostalCodey = order.CitShipPostalCodey);
+            }
         }
     }
 }

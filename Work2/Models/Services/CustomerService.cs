@@ -19,7 +19,7 @@ namespace Work2.Models.Services
                 },
                 new Customer()
                 {
-                    CustomerID= 1,
+                    CustomerID= 2,
                     CompanyName="老四",
                     ContactName="小四",
                     Address = "雲林"

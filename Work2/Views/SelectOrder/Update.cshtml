@@ -1,7 +1,79 @@
 ﻿
+@model Work2.Models.Order
 @{
     ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Update</h2>
+@using (Html.BeginForm("Update", "SelectOrder", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderID)</td>
+            <td>@Html.TextBoxFor(model => model.OrderID, new { Value = ViewBag.updateorder[0].OrderID, Readonly = true, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CustomerID)</td>
+            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.EmployeeID)</td>
+            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderDate)</td>
+            <td>@Html.TextBoxFor(model => model.OrderDate, new { Value = ViewBag.updateorder[0].OrderDate.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.RequiredDate)</td>
+            <td>@Html.TextBoxFor(model => model.RequiredDate, new { Value = ViewBag.updateorder[0].RequiredDate.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperDate)</td>
+            <td>@Html.TextBoxFor(model => model.ShipperDate, new { Value = ViewBag.updateorder[0].ShipperDate.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperID)</td>
+            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperslist, "請選擇...")</td>
+        </tr>
 
+        <tr>
+            <td>@Html.LabelFor(model => model.Freight)</td>
+            <td>@Html.TextBoxFor(model => model.Freight, new { Value = ViewBag.updateorder[0].Freight, type = "number", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Freight)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCountry)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCountry, new { Value = ViewBag.updateorder[0].ShipCountry, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCity)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCity, new { Value = ViewBag.updateorder[0].ShipCity, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipRegion)</td>
+            <td>@Html.TextBoxFor(model => model.ShipRegion, new { Value = ViewBag.updateorder[0].ShipRegion, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipRegion)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
+            <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { Value = ViewBag.updateorder[0].CitShipPostalCodey, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CitShipPostalCodey)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipAddress)</td>
+            <td>@Html.TextBoxFor(model => model.ShipAddress, new { Value = ViewBag.updateorder[0].ShipAddress, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
+        </tr>
+    </table>
+    <input type="submit" value="存檔" />
+    <button onclick="location.href='@Url.Action("Del", "SelectOrder",new { orderID = ViewBag.updateorder[0].OrderID })';return false;">刪除本筆訂單</button>
+    <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回查詢頁</button>
+}

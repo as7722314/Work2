@@ -22,7 +22,7 @@
                 @order.OrderID
             </td>
             <td>
-                @customerService.GetCustomerCondition(order.CustomerID);
+                @customerService.GetCustomerCondition(@order.CustomerID)
             </td>
             <td>
                 @order.OrderDate.ToString("yyyy/MM/dd")

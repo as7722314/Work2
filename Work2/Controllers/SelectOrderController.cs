@@ -62,7 +62,7 @@ namespace Work2.Controllers
             {
                 EmployeeService employeeservice = new EmployeeService();
                 List<SelectListItem> namelist = employeeservice.GetNameList();
-                ViewBag.employeelist = namelist;
+                ViewBag.namelist = namelist;
                 ShipperService shippersservice = new ShipperService();
                 List<SelectListItem> shipperlist = shippersservice.GetShipperList();
                 ViewBag.shipperlist = shipperlist;
@@ -82,18 +82,94 @@ namespace Work2.Controllers
         [HttpGet]
         public ActionResult Update(int orderid)
         {
-            OrderService orderService = new OrderService();
+            OrderService orderService = new OrderService();            
             ViewBag.updateorder = orderService.GetOrders(orderid);
             EmployeeService employeeservice = new EmployeeService();
-            List<SelectListItem> namelist = employeeservice.GetNameList();
-            ViewBag.employeelist = namelist;
-            ShipperService shippersservice = new ShipperService();
-            List<SelectListItem> shipperslist = shippersservice.GetShipperList();
-            ViewBag.shipperslist = shipperslist;
+            List<SelectListItem> employeeitems = employeeservice.GetNameList();
+            foreach (SelectListItem item in employeeitems)
+            {
+                if (item.Value == orderService.GetOrders(orderid)[0].EmployeeID.ToString())
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            ViewBag.employeelist = employeeitems;
+            ShipperService shipperservice = new ShipperService();
+            List<SelectListItem> shippersitems = shipperservice.GetShipperList();
+            foreach (SelectListItem item in shippersitems)
+            {
+                if (item.Value == orderService.GetOrders(orderid)[0].ShipperID.ToString())
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            ViewBag.shipperslist = shippersitems;
             CustomerService customerservice = new CustomerService();
-            List<SelectListItem> customerlist = customerservice.GetCustomerList();
-            ViewBag.customerlist = customerlist;
+            List<SelectListItem> customeritems = customerservice.GetCustomerList();
+            foreach (SelectListItem item in customeritems)
+            {
+                if (item.Value == orderService.GetOrders(orderid)[0].CustomerID.ToString())
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            ViewBag.customerlist = customeritems;
             return View();
+        }
+        [HttpPost]
+        public ActionResult Update(Order arg)
+        {
+            if (ModelState.IsValid)
+            {
+                ModelState.Clear();
+                OrderService orderService = new OrderService();
+                orderService.Update(arg);
+                return RedirectToAction("Index", "SelectOrder");
+            }
+            else
+            {
+                OrderService orderService = new OrderService();
+                List<Order> orders = orderService.GetOrders(arg.OrderID);
+                orders[0] = arg;
+                ViewBag.updateorder = orders;
+                EmployeeService employeeservice = new EmployeeService();
+                List<SelectListItem> employeeitems = employeeservice.GetNameList();
+                foreach (SelectListItem item in employeeitems)
+                {
+                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].EmployeeID.ToString())
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+                ViewBag.employeelist = employeeitems;
+                ShipperService shippersservice = new ShipperService();
+                List<SelectListItem> shippersitems = shippersservice.GetShipperList();
+                foreach (SelectListItem item in shippersitems)
+                {
+                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].ShipperID.ToString())
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+                ViewBag.shipperslist = shippersitems;
+                CustomerService customerservice = new CustomerService();
+                List<SelectListItem> customeritems = customerservice.GetCustomerList();
+                foreach (SelectListItem item in customeritems)
+                {
+                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].CustomerID.ToString())
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+                ViewBag.customerlist = customeritems;
+                return View();
+            } 
         }
     }
 }
