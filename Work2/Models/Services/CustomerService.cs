@@ -31,11 +31,7 @@ namespace Work2.Models.Services
             Customer customer = GetCustomer.SingleOrDefault(m => m.CustomerID == id);
             return customer.CompanyName;
         }
-        public List<Customer> GetCustomers()
-        {
-            return GetCustomer;
-        }
-
+        
 
 
         public List<SelectListItem> GetCustomerList()

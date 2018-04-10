@@ -38,7 +38,7 @@ namespace Work2.Controllers
         {
             EmployeeService employeeservice = new EmployeeService();
             List<SelectListItem> namelist = employeeservice.GetNameList();
-            ViewBag.employeelist = namelist;
+            ViewBag.namelist = namelist;
             ShipperService shippersservice = new ShipperService();
             List<SelectListItem> shipperlist = shippersservice.GetShipperList();
             ViewBag.shipperlist = shipperlist;

@@ -1,6 +1,8 @@
 ﻿@{
+    Work2.Models.Services.CustomerService customerService = new Work2.Models.Services.CustomerService();
     ViewBag.Title = "SelectList";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <table>
@@ -20,7 +22,7 @@
                 @order.OrderID
             </td>
             <td>
-                @order.CustomerID
+                @customerService.GetCustomerCondition(order.CustomerID);
             </td>
             <td>
                 @order.OrderDate.ToString("yyyy/MM/dd")

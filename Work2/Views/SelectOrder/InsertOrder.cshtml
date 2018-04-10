@@ -1,7 +1,67 @@
 ﻿
+@model Work2.Models.Order
 @{
     ViewBag.Title = "InsertOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>InsertOrder</h2>
+@using (Html.BeginForm("InsertOrder", "SelectOrder", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>@Html.LabelFor(model => model.CustomerID)</td>
+            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.EmployeeID)</td>
+            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.namelist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderDate)</td>
+            <td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.RequiredDate)</td>
+            <td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperDate)</td>
+            <td>@Html.TextBoxFor(model => model.ShipperDate, new { @type = "date", @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperID)</td>
+            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperlist, "請選擇...")</td>
+        </tr>
 
+        <tr>
+            <td>@Html.LabelFor(model => model.Freight)</td>
+            <td>@Html.TextBoxFor(model => model.Freight, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCountry)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCity)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipRegion)</td>
+            <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
+            <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipAddress)</td>
+            <td>@Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+    <input type="submit" value="存檔" />
+}
+<button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回上一頁</button>
