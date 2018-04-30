@@ -118,6 +118,7 @@ namespace Work2.Controllers
             }
             ViewBag.customerlist = customeritems;
             return View();
+
         }
         [HttpPost]
         public ActionResult Update(Order arg)
