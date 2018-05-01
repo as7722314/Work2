@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -7,42 +9,31 @@ using System.Web.Mvc;
 namespace Work2.Models.Services
 {
     public class CustomerService
-    {
-        public static List<Customer> GetCustomers = new List<Customer>()
+    {        
+        private string GetConnStr()
         {
-            new Customer()
-            {
-                CustomerID=1,
-                CompanyName="大雄公司",
-                ContactName="老雄",
-                Address="0978196729"
-            },
-            new Customer()
-            {
-                CustomerID=2,
-                CompanyName="小夫公司",
-                ContactName="老夫",
-                Address="0972883358"
-            }
-        };
-
+            return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
+        }
         public List<SelectListItem> GetCustomerList()
         {
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            String sql = "Select CustomerID,CompanyName from Sales.Customers";
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+            DataSet ds = new DataSet();
+            dataAdapter.Fill(ds);
+            DataTable dataTable = ds.Tables[0];
             List<SelectListItem> costomerlist = new List<SelectListItem>();
-            foreach (Customer c in GetCustomers)
+            for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 costomerlist.Add(new SelectListItem()
                 {
-                    Text = c.CompanyName,
-                    Value = c.CustomerID.ToString()
+                    Text = dataTable.Rows[i][1].ToString(),
+                    Value = dataTable.Rows[i][0].ToString()
                 });
             }
             return costomerlist;
         }
-        public string GetCustomerCondition(int? id)
-        {
-            Customer customer = GetCustomers.SingleOrDefault(m => m.CustomerID == id);
-            return customer.CompanyName;
-        }
+        
     }
 }

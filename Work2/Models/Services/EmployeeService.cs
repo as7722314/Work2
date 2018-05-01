@@ -9,35 +9,7 @@ using System.Web.Mvc;
 namespace Work2.Models.Services
 {
     public class EmployeeService
-    {
-        public static List<Employee> GetEmployees = new List<Employee>()
-        {
-            new Employee()
-            {
-                EmployeeID=1,
-                EmployeeFirstName="大",
-                EmployeeLastName="雄"
-            },
-            new Employee()
-            {
-                EmployeeID=2,
-                EmployeeFirstName="小",
-                EmployeeLastName="夫"
-            }
-        };
-        public List<SelectListItem> GetEmployeeList()
-        {
-            List<SelectListItem> employeelist = new List<SelectListItem>();
-            foreach (Employee e in GetEmployees)
-            {
-                employeelist.Add(new SelectListItem()
-                {
-                    Text = e.EmployeeFirstName + e.EmployeeLastName,
-                    Value = e.EmployeeID.ToString()
-                });
-            }
-            return employeelist;
-        }
+    {        
         private string GetConnStr()
         {
             return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
