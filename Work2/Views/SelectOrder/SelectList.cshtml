@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Work2.Models.Order>
+@{
     Work2.Models.Services.CustomerService customerService = new Work2.Models.Services.CustomerService();
     ViewBag.Title = "SelectList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,31 +16,31 @@
         <th></th>
         <th></th>
     </tr>
-    @foreach (var order in @ViewBag.orderlist)
+    @foreach (var order in Model)
     {
-        <tr>
-            <td>
-                @order.OrderID
-            </td>
-            <td>
-                @customerService.GetCustomerCondition(@order.CustomerID)
-            </td>
-            <td>
-                @order.OrderDate.ToString("yyyy/MM/dd")
-            </td>
-            <td>
-                @order.ShipperDate.ToString("yyyy/MM/dd")
-            </td>
-            <td>
-                @order.Freight.ToString("#,###0")
-            </td>
-            <td>
-                @Html.ActionLink("修改", "Update", new { controller = "SelectOrder", orderID = order.OrderID })
-            </td>
-            <td>
-                @Html.ActionLink("刪除", "Del", new { controller = "SelectOrder", orderID = order.OrderID })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @order.OrderID
+        </td>
+        <td>
+            @customerService.GetCustomerCondition(@order.CustomerID)
+        </td>
+        <td>
+            @(order.OrderDate.HasValue ? order.OrderDate.Value.ToString("yyyy/MM/dd") : "")
+        </td>
+        <td>
+            @(order.ShipperDate.HasValue ? order.ShipperDate.Value.ToString("yyyy/MM/dd") : "")
+        </td>
+        <td>
+            @(order.Freight.HasValue ? order.Freight.Value.ToString("#,###0") : "")
+        </td>
+        <td>
+            @Html.ActionLink("修改", "Update", new { controller = "SelectOrder", orderID = order.OrderID })
+        </td>
+        <td>
+            @Html.ActionLink("刪除", "Del", new { controller = "SelectOrder", orderID = order.OrderID })
+        </td>
+    </tr>
     }
 </table>
 <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回查詢頁</button>

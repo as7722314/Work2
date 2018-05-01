@@ -15,39 +15,37 @@ namespace Work2.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            EmployeeService employeeservice = new EmployeeService();
-            List<SelectListItem> namelist = employeeservice.GetNameList();
-            ViewBag.namelist = namelist;
-            ShipperService shipperservice = new ShipperService();
-            List<SelectListItem> shipperlist = shipperservice.GetShipperList();
-            ViewBag.shipperlist = shipperlist;
+            EmployeeService employeeService = new EmployeeService();
+            ViewBag.employeelist = employeeService.GetEnameList();
+            ShipperService shipperService = new ShipperService();
+            ViewBag.shipperlist = shipperService.GetSnameList();
             return View();
         }
-
         [HttpPost]
         public ActionResult SelectList(Index arg)
         {
-            OrderService orderservice = new OrderService();
-            List<Order> orders = orderservice.GetOrderCondition(arg);
-            ViewBag.orderlist = orders;
-            return View();
+            OrderService orderService = new OrderService();
+            return View(orderService.GetOrderCondition(arg));
         }
-
+        [HttpGet]
+        public ActionResult Del(int orderid)
+        {
+            OrderService orderService = new OrderService();
+            orderService.Del(orderid);
+            return RedirectToAction("Index", "SelectOrder");
+        }
         [HttpGet]
         public ActionResult InsertOrder()
         {
-            EmployeeService employeeservice = new EmployeeService();
-            List<SelectListItem> namelist = employeeservice.GetNameList();
-            ViewBag.namelist = namelist;
-            ShipperService shippersservice = new ShipperService();
-            List<SelectListItem> shipperlist = shippersservice.GetShipperList();
-            ViewBag.shipperlist = shipperlist;
+            ///準備員工、物流、顧客的下拉式選單
+            EmployeeService employeeService = new EmployeeService();
+            ViewBag.employeelist = employeeService.GetEmployeeList();
+            ShipperService shipperService = new ShipperService();
+            ViewBag.shipperlist = shipperService.GetShipperList();
             CustomerService customerservice = new CustomerService();
-            List<SelectListItem> customerlist = customerservice.GetCustomerList();
-            ViewBag.customerlist = customerlist;
+            ViewBag.customerlist = customerservice.GetCustomerList();
             return View();
         }
-
         [HttpPost]
         public ActionResult InsertOrder(Order arg)
         {
@@ -60,64 +58,42 @@ namespace Work2.Controllers
             }
             else
             {
-                EmployeeService employeeservice = new EmployeeService();
-                List<SelectListItem> namelist = employeeservice.GetNameList();
-                ViewBag.namelist = namelist;
-                ShipperService shippersservice = new ShipperService();
-                List<SelectListItem> shipperlist = shippersservice.GetShipperList();
-                ViewBag.shipperlist = shipperlist;
+                EmployeeService employeeService = new EmployeeService();
+                ViewBag.employeelist = employeeService.GetEmployeeList();
+                ShipperService shipperService = new ShipperService();
+                ViewBag.shipperlist = shipperService.GetShipperList();
                 CustomerService customerservice = new CustomerService();
-                List<SelectListItem> customerlist = customerservice.GetCustomerList();
-                ViewBag.customerlist = customerlist;
-                return View("InsertOrder");
+                ViewBag.customerlist = customerservice.GetCustomerList();
+                return View();
             }
         }
-        [HttpGet]
-        public ActionResult Del(int orderid)
-        {
-            OrderService orderService = new OrderService();
-            orderService.Del(orderid);
-            return RedirectToAction("Index", "SelectOrder");
-        }
+        /// <summary>
+        /// 更新資料頁
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Update(int orderid)
         {
-            OrderService orderService = new OrderService();            
-            ViewBag.updateorder = orderService.GetOrders(orderid);
+            ///獲得訂單資料
+            OrderService orderService = new OrderService();
+
+            ///準備員工下拉式選單           
             EmployeeService employeeservice = new EmployeeService();
-            List<SelectListItem> employeeitems = employeeservice.GetNameList();
-            foreach (SelectListItem item in employeeitems)
-            {
-                if (item.Value == orderService.GetOrders(orderid)[0].EmployeeID.ToString())
-                {
-                    item.Selected = true;
-                    break;
-                }
-            }
+            List<SelectListItem> employeeitems = employeeservice.GetEmployeeList();
             ViewBag.employeelist = employeeitems;
+
+            ///準備物流下拉式選單
             ShipperService shipperservice = new ShipperService();
             List<SelectListItem> shippersitems = shipperservice.GetShipperList();
-            foreach (SelectListItem item in shippersitems)
-            {
-                if (item.Value == orderService.GetOrders(orderid)[0].ShipperID.ToString())
-                {
-                    item.Selected = true;
-                    break;
-                }
-            }
             ViewBag.shipperslist = shippersitems;
+
+            ///準備員工下拉式選單
             CustomerService customerservice = new CustomerService();
             List<SelectListItem> customeritems = customerservice.GetCustomerList();
-            foreach (SelectListItem item in customeritems)
-            {
-                if (item.Value == orderService.GetOrders(orderid)[0].CustomerID.ToString())
-                {
-                    item.Selected = true;
-                    break;
-                }
-            }
-            ViewBag.customerlist = customeritems;
-            return View();
+            ViewBag.customerlist = shippersitems;
+            return View(orderService.GetOrders(orderid));
+
 
         }
         [HttpPost]
@@ -131,46 +107,24 @@ namespace Work2.Controllers
                 return RedirectToAction("Index", "SelectOrder");
             }
             else
-            {
+            {   ///獲得訂單資料
                 OrderService orderService = new OrderService();
-                List<Order> orders = orderService.GetOrders(arg.OrderID);
-                orders[0] = arg;
-                ViewBag.updateorder = orders;
+
+                ///準備員工下拉式選單           
                 EmployeeService employeeservice = new EmployeeService();
-                List<SelectListItem> employeeitems = employeeservice.GetNameList();
-                foreach (SelectListItem item in employeeitems)
-                {
-                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].EmployeeID.ToString())
-                    {
-                        item.Selected = true;
-                        break;
-                    }
-                }
+                List<SelectListItem> employeeitems = employeeservice.GetEmployeeList();
                 ViewBag.employeelist = employeeitems;
+                ///準備物流下拉式選單
                 ShipperService shippersservice = new ShipperService();
                 List<SelectListItem> shippersitems = shippersservice.GetShipperList();
-                foreach (SelectListItem item in shippersitems)
-                {
-                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].ShipperID.ToString())
-                    {
-                        item.Selected = true;
-                        break;
-                    }
-                }
                 ViewBag.shipperslist = shippersitems;
+                ///準備員工下拉式選單
                 CustomerService customerservice = new CustomerService();
                 List<SelectListItem> customeritems = customerservice.GetCustomerList();
-                foreach (SelectListItem item in customeritems)
-                {
-                    if (item.Value == orderService.GetOrders(arg.OrderID)[0].CustomerID.ToString())
-                    {
-                        item.Selected = true;
-                        break;
-                    }
-                }
                 ViewBag.customerlist = customeritems;
-                return View();
-            } 
+
+                return View(orderService.GetOrders(arg.OrderID));
+            }
         }
     }
 }

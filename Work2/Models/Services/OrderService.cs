@@ -40,108 +40,63 @@ namespace Work2.Models.Services
                     CitShipPostalCodey = "801",
                     ShipCountry = "台灣"
                 }
-
         };
-        public List<Order> GetOrders(int? id)
-        {
-            List<Order> order = GetOrder.Where(m=>m.OrderID==id).ToList();
-            return order;
-        }
+
         public List<Order> GetOrderCondition(Index arg)
         {
-            CustomerService customerService = new CustomerService();
-            IEnumerable<Order> orders = GetOrder;
+            CustomerService customerService = new CustomerService();///為了取出顧客名字,所以先產生Customer物件
+            List<Order> orders = GetOrder;
             if (arg.OrderID.HasValue)
             {
-                orders = orders.Where(m => m.OrderID == arg.OrderID);
+                orders = orders.Where(m => m.OrderID == arg.OrderID).ToList();
             }
             if (arg.CompanyName != null)
             {
-                orders = orders.Where(m => customerService.GetCustomerCondition(m.CustomerID).Contains(arg.CompanyName));
+                orders = orders.Where(m => customerService.GetCustomerCondition(m.CustomerID).Contains(arg.CompanyName)).ToList();
+                ///透過呼叫方法,傳回顧客名字
             }
             if (arg.EmployeeID.HasValue)
             {
-                orders = orders.Where(m => m.EmployeeID == arg.EmployeeID);
+                orders = orders.Where(m => m.EmployeeID == arg.EmployeeID).ToList();
             }
             if (arg.ShipperID.HasValue)
             {
-                orders = orders.Where(m => m.ShipperID == arg.ShipperID);
+                orders = orders.Where(m => m.ShipperID == arg.ShipperID).ToList();
             }
             if (arg.OrderDate.HasValue)
             {
-                orders = orders.Where(m => m.OrderDate == arg.OrderDate);
+                orders = orders.Where(m => m.OrderDate == arg.OrderDate).ToList();
             }
             if (arg.RequiredDate.HasValue)
             {
-                orders = orders.Where(m => m.RequiredDate == arg.RequiredDate);
+                orders = orders.Where(m => m.RequiredDate == arg.RequiredDate).ToList();
             }
             if (arg.ShipperDate.HasValue)
             {
-                orders = orders.Where(m => m.ShipperDate == arg.ShipperDate);
+                orders = orders.Where(m => m.ShipperDate == arg.ShipperDate).ToList();
             }
-            return orders.ToList();
-        }
-        public void InsertOrder(Order order)
-        {
-            order.OrderID = GetOrder.Count + 1;
-            GetOrder.Add(order);
+            return orders;
         }
         public void Del(int orderid)
         {
+            int id = GetOrder.FindIndex(m => m.OrderID == orderid);
+            GetOrder.RemoveAt(id);
+        }
+        public void InsertOrder(Order order)
+        {
+            order.OrderID = GetOrder.Count + 1;///orderid +1 
+            GetOrder.Add(order);///新的訂單資料加進去            
+        }
+        public Order GetOrders(int? orderid)
+        {
             Order order = GetOrder.SingleOrDefault(m => m.OrderID == orderid);
-            GetOrder.Remove(order);
+            return order;
         }
         public void Update(Order order)
         {
-            List<Order> orders = GetOrder;
-            if (order.CustomerID.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.CustomerID = order.CustomerID);
-            }
-            if (order.EmployeeID.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.EmployeeID = order.EmployeeID);
-            }
-            if (order.OrderDate.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.OrderDate = order.OrderDate);
-            }
-            if (order.RequiredDate.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.RequiredDate = order.RequiredDate);
-            }
-            if (order.ShipperDate.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipperDate = order.ShipperDate);
-            }
-            if (order.ShipperID.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipperID = order.ShipperID);
-            }
-            if (order.Freight.HasValue)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.Freight = order.Freight);
-            }
-            if (order.ShipAddress != null)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipAddress = order.ShipAddress);
-            }
-            if (order.ShipCity != null)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipCity = order.ShipCity);
-            }
-            if (order.ShipCountry != null)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipCountry = order.ShipCountry);
-            }
-            if (order.ShipRegion != null)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.ShipRegion = order.ShipRegion);
-            }
-            if (order.CitShipPostalCodey != null)
-            {
-                orders.Where(m => m.OrderID == order.OrderID).ToList().ForEach(m => m.CitShipPostalCodey = order.CitShipPostalCodey);
-            }
+            int id = GetOrder.FindIndex(m => m.OrderID == order.OrderID);
+            GetOrder.RemoveAt(id);
+            GetOrder.Insert(id, order);
         }
     }
 }

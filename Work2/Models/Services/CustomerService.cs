@@ -8,45 +8,41 @@ namespace Work2.Models.Services
 {
     public class CustomerService
     {
-        public static List<Customer> GetCustomer = new List<Customer>()
-            {
-                new Customer()
-                {
-                    CustomerID= 1,
-                    CompanyName="老三",
-                    ContactName="小三",
-                    Address = "高雄"
-                },
-                new Customer()
-                {
-                    CustomerID= 2,
-                    CompanyName="老四",
-                    ContactName="小四",
-                    Address = "雲林"
-                }
-            };
-
-        public string GetCustomerCondition(int? id)
+        public static List<Customer> GetCustomers = new List<Customer>()
         {
-            Customer customer = GetCustomer.SingleOrDefault(m => m.CustomerID == id);
-            return customer.CompanyName;
-        }
-        
-
+            new Customer()
+            {
+                CustomerID=1,
+                CompanyName="大雄公司",
+                ContactName="老雄",
+                Address="0978196729"
+            },
+            new Customer()
+            {
+                CustomerID=2,
+                CompanyName="小夫公司",
+                ContactName="老夫",
+                Address="0972883358"
+            }
+        };
 
         public List<SelectListItem> GetCustomerList()
         {
-            List<SelectListItem> CustomerList = new List<SelectListItem>();
-            foreach (Customer a in GetCustomer)
+            List<SelectListItem> costomerlist = new List<SelectListItem>();
+            foreach (Customer c in GetCustomers)
             {
-                CustomerList.Add(new SelectListItem()
+                costomerlist.Add(new SelectListItem()
                 {
-                    Text = a.CompanyName,
-                    Value = a.CustomerID.ToString()
+                    Text = c.CompanyName,
+                    Value = c.CustomerID.ToString()
                 });
-
             }
-            return CustomerList;
+            return costomerlist;
+        }
+        public string GetCustomerCondition(int? id)
+        {
+            Customer customer = GetCustomers.SingleOrDefault(m => m.CustomerID == id);
+            return customer.CompanyName;
         }
     }
 }
