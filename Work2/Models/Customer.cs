@@ -10,7 +10,7 @@ namespace Work2.Models
     public class Customer
     {
         /// <summary>
-        /// 客戶編號123
+        /// 客戶編號
         /// </summary>
         ///
         [DisplayName("客戶編號")]
