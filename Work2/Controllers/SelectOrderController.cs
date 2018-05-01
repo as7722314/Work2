@@ -123,7 +123,6 @@ namespace Work2.Controllers
                 CustomerService customerservice = new CustomerService();
                 List<SelectListItem> customeritems = customerservice.GetCustomerList();
                 ViewBag.customerlist = customeritems;
-
                 return View(orderService.GetOrders(arg.OrderID));
             }
         }
