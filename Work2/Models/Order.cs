@@ -10,10 +10,10 @@ namespace Work2.Models
     public class Order
     {
         /// <summary>
-        /// 訂單detail
+        /// 訂單Detail
         /// </summary>
         /// 
-        public List<Order> OrderDetails { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
         /// <summary>
         /// 訂單編號
         /// </summary>

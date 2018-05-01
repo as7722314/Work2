@@ -112,6 +112,7 @@
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Index.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Services\CustomerService.cs" />
     <Compile Include="Models\Services\EmployeeService.cs" />
     <Compile Include="Models\Services\OrderService.cs" />
