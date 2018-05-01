@@ -39,9 +39,9 @@ namespace Work2.Controllers
         {
             ///準備員工、物流、顧客的下拉式選單
             EmployeeService employeeService = new EmployeeService();
-            ViewBag.employeelist = employeeService.GetEmployeeList();
+            ViewBag.employeelist = employeeService.GetEnameList();
             ShipperService shipperService = new ShipperService();
-            ViewBag.shipperlist = shipperService.GetShipperList();
+            ViewBag.shipperlist = shipperService.GetSnameList();
             CustomerService customerservice = new CustomerService();
             ViewBag.customerlist = customerservice.GetCustomerList();
             return View();
@@ -59,9 +59,9 @@ namespace Work2.Controllers
             else
             {
                 EmployeeService employeeService = new EmployeeService();
-                ViewBag.employeelist = employeeService.GetEmployeeList();
+                ViewBag.employeelist = employeeService.GetEnameList();
                 ShipperService shipperService = new ShipperService();
-                ViewBag.shipperlist = shipperService.GetShipperList();
+                ViewBag.shipperlist = shipperService.GetSnameList();
                 CustomerService customerservice = new CustomerService();
                 ViewBag.customerlist = customerservice.GetCustomerList();
                 return View();
@@ -80,12 +80,12 @@ namespace Work2.Controllers
 
             ///準備員工下拉式選單           
             EmployeeService employeeservice = new EmployeeService();
-            List<SelectListItem> employeeitems = employeeservice.GetEmployeeList();
+            List<SelectListItem> employeeitems = employeeservice.GetEnameList();
             ViewBag.employeelist = employeeitems;
 
             ///準備物流下拉式選單
             ShipperService shipperservice = new ShipperService();
-            List<SelectListItem> shippersitems = shipperservice.GetShipperList();
+            List<SelectListItem> shippersitems = shipperservice.GetSnameList();
             ViewBag.shipperslist = shippersitems;
 
             ///準備員工下拉式選單
@@ -112,11 +112,11 @@ namespace Work2.Controllers
 
                 ///準備員工下拉式選單           
                 EmployeeService employeeservice = new EmployeeService();
-                List<SelectListItem> employeeitems = employeeservice.GetEmployeeList();
+                List<SelectListItem> employeeitems = employeeservice.GetEnameList();
                 ViewBag.employeelist = employeeitems;
                 ///準備物流下拉式選單
                 ShipperService shippersservice = new ShipperService();
-                List<SelectListItem> shippersitems = shippersservice.GetShipperList();
+                List<SelectListItem> shippersitems = shippersservice.GetSnameList();
                 ViewBag.shipperslist = shippersitems;
                 ///準備員工下拉式選單
                 CustomerService customerservice = new CustomerService();
