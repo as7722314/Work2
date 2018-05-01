@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,43 +42,7 @@ namespace Work2.Models.Services
                     CitShipPostalCodey = "801",
                     ShipCountry = "台灣"
                 }
-        };
-
-        public List<Order> GetOrderCondition(Index arg)
-        {
-            CustomerService customerService = new CustomerService();///為了取出顧客名字,所以先產生Customer物件
-            List<Order> orders = GetOrder;
-            if (arg.OrderID.HasValue)
-            {
-                orders = orders.Where(m => m.OrderID == arg.OrderID).ToList();
-            }
-            if (arg.CompanyName != null)
-            {
-                orders = orders.Where(m => customerService.GetCustomerCondition(m.CustomerID).Contains(arg.CompanyName)).ToList();
-                ///透過呼叫方法,傳回顧客名字
-            }
-            if (arg.EmployeeID.HasValue)
-            {
-                orders = orders.Where(m => m.EmployeeID == arg.EmployeeID).ToList();
-            }
-            if (arg.ShipperID.HasValue)
-            {
-                orders = orders.Where(m => m.ShipperID == arg.ShipperID).ToList();
-            }
-            if (arg.OrderDate.HasValue)
-            {
-                orders = orders.Where(m => m.OrderDate == arg.OrderDate).ToList();
-            }
-            if (arg.RequiredDate.HasValue)
-            {
-                orders = orders.Where(m => m.RequiredDate == arg.RequiredDate).ToList();
-            }
-            if (arg.ShipperDate.HasValue)
-            {
-                orders = orders.Where(m => m.ShipperDate == arg.ShipperDate).ToList();
-            }
-            return orders;
-        }
+        };      
         public void Del(int orderid)
         {
             int id = GetOrder.FindIndex(m => m.OrderID == orderid);
@@ -97,6 +63,87 @@ namespace Work2.Models.Services
             int id = GetOrder.FindIndex(m => m.OrderID == order.OrderID);
             GetOrder.RemoveAt(id);
             GetOrder.Insert(id, order);
+        }
+        private string GetConnStr()
+        {
+            return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
+        }
+        public DataTable GetOrderCondition(Index arg)
+        {
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            String sql = "Select OrderID,CompanyName,OrderDate,ShippedDate from Sales.Orders join Sales.Customers on Sales.Orders.CustomerID = Sales.Customers.CustomerID where ";
+            if(arg.OrderID.HasValue)
+            {
+                sql += "OrderID = @OrderID";
+            }
+            else
+            {
+                sql += "OrderID like @OrderID";
+            }
+            if (!string.IsNullOrWhiteSpace(arg.CompanyName))
+            {
+                sql += " and CompanyName = @CompanyName";
+            }
+            if (arg.EmployeeID.HasValue)
+            {
+                sql += " and EmployeeID = @EmployeeID";
+            }
+            if (arg.ShipperID.HasValue)
+            {
+                sql += " and ShipperID = @ShipperID";
+            }
+            if (arg.OrderDate.HasValue)
+            {
+                sql += " and OrderDate = @OrderDate";
+            }
+            if (arg.RequiredDate.HasValue)
+            {
+                sql += " and RequiredDate = @RequiredDate";
+            }
+            if (arg.ShipperDate.HasValue)
+            {
+                sql += " and ShipperedDate = @ShipperDate";
+            }
+            SqlCommand command = new SqlCommand(sql,conn);
+            
+            if (arg.OrderID.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@OrderID", arg.OrderID));
+            }
+            else
+            {
+                command.Parameters.Add(new SqlParameter("@OrderID", "%"));
+            }
+            if (!string.IsNullOrWhiteSpace(arg.CompanyName))
+            {
+                command.Parameters.Add(new SqlParameter("@CompanyName", arg.CompanyName));
+            }
+            if (arg.EmployeeID.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID));
+            }
+            if (arg.ShipperID.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@ShipperID", arg.ShipperID));
+            }
+            if (arg.OrderDate.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@OrderDate", arg.OrderDate));
+            }
+            if (arg.RequiredDate.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@RequiredDate", arg.RequiredDate));
+            }
+            if (arg.ShipperDate.HasValue)
+            {
+                command.Parameters.Add(new SqlParameter("@ShipperDate", arg.ShipperDate));
+            }
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            DataSet ds = new DataSet();
+            dataAdapter.Fill(ds);
+            DataTable dataTable = ds.Tables[0];
+            return dataTable;
         }
     }
 }

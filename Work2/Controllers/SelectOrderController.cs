@@ -25,7 +25,8 @@ namespace Work2.Controllers
         public ActionResult SelectList(Index arg)
         {
             OrderService orderService = new OrderService();
-            return View(orderService.GetOrderCondition(arg));
+            ViewBag.Orderdata = orderService.GetOrderCondition(arg);
+            return View(ViewBag.Orderdata);
         }
         [HttpGet]
         public ActionResult Del(int orderid)
