@@ -26,7 +26,7 @@ namespace Work2.Controllers
         {
             OrderService orderService = new OrderService();
             ViewBag.Orderdata = orderService.GetOrderCondition(arg);
-            return View(ViewBag.Orderdata);
+            return View();
         }
         [HttpGet]
         public ActionResult Del(int orderid)
@@ -125,6 +125,13 @@ namespace Work2.Controllers
                 ViewBag.customerlist = customeritems;
                 return View(orderService.GetOrders(arg.OrderID));
             }
+        }
+        [HttpGet]
+        public JsonResult InsertProduct()
+        {
+            OrderService orderService = new OrderService();
+            List<SelectListItem> result = orderService.GetOrderDetailList();
+            return this.Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

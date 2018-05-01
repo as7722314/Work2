@@ -70,4 +70,31 @@
     </table>
     <input type="submit" value="存檔" />
     <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回上一頁</button>
+    <h3>訂單明細:</h3>
+    <table id="detailtable" border="1">
+        <tr>
+            <th>商品</th>
+            <th>單價</th>
+            <th>數量</th>
+            <th>小計</th>
+            <th>動作</th>
+        </tr>
+    </table>
 }
+    <button onclick="InsertProduct()" id="InsertProduct">新增商品</button>
+    <script type="text/javascript">
+        function InsertProduct() {
+            $.ajax({
+                type = "Get",
+                url = "/SelectOrder/InsertProduct",
+                datatype: "json",
+                success: function (response) {
+                    
+
+                },              
+                error: function (error) {
+                    alert("新增欄位失敗");
+                }
+            });
+        };
+    </script>

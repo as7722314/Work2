@@ -145,5 +145,25 @@ namespace Work2.Models.Services
             DataTable dataTable = ds.Tables[0];
             return dataTable;
         }
+        public List<SelectListItem> GetOrderDetailList()
+        {
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            String sql = "Select ProductID,ProductName from Production.Products";
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+            DataSet ds = new DataSet();
+            dataAdapter.Fill(ds);
+            DataTable dataTable = ds.Tables[0];
+            List<SelectListItem> orderDetailList = new List<SelectListItem>();
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                orderDetailList.Add(new SelectListItem()
+                {
+                    Text = dataTable.Rows[i][1].ToString(),
+                    Value = dataTable.Rows[i][0].ToString()
+                });
+            }
+            return orderDetailList;
+        }
     }
 }
