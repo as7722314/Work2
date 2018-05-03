@@ -133,5 +133,12 @@ namespace Work2.Controllers
             List<SelectListItem> result = orderService.GetOrderDetailList();
             return this.Json(result, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetPrice(string arg)
+        {
+            OrderService orderService = new OrderService();
+            string result = orderService.GetUnitPrice(arg);
+            return this.Json(result, JsonRequestBehavior.AllowGet);
+        }
+        ///http://white1027.blogspot.tw/2013/06/js-jquery.html
     }
 }

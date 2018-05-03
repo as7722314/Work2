@@ -165,5 +165,18 @@ namespace Work2.Models.Services
             }
             return orderDetailList;
         }
+        public String GetUnitPrice(string arg)
+        {
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            String sql = "Select UnitPrice from Production.Products where ProductID = @ProductID";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.Add(new SqlParameter("@ProductID", arg));        
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            DataSet ds = new DataSet();
+            dataAdapter.Fill(ds);
+            DataTable dataTable = ds.Tables[0];
+            return dataTable.Rows[0][0].ToString();
+        }
     }
 }

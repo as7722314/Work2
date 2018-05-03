@@ -85,16 +85,44 @@
     <script type="text/javascript">
         function InsertProduct() {
             $.ajax({
-                type = "Get",
-                url = "/SelectOrder/InsertProduct",
-                datatype: "json",
+                type : "Get",
+                url : "/SelectOrder/InsertProduct",
+                datatype : "json",
                 success: function (response) {
-                    
-
+                    var id = $("#detailtable").find("tr").length-1
+                    row = "<tr><td><select id = 'OrderDetail[" + id + "].ProductID' name = 'OrderDetail[" + id + "].ProductID' onchange = 'GetPrice("+id+")'>"
+                    for (var i=0;i<response.length;i++){
+                        row += "<option value = " + response[i].Value + ">" + response[i].Text + "</option>"
+                    }
+                    row += "</select></td>"
+                    row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' </td>" +
+                        "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' </td>" +
+                        "<td> <input type='text' id='Sum[" + id + "]' name = 'Sum[" + id + "]' </td>"+
+                        "<td><input type = 'button' onclick = 'del(this)' value = '刪除'></td></tr>"
+                        
+                    $("#detailtable").append(row);
                 },              
                 error: function (error) {
                     alert("新增欄位失敗");
                 }
             });
         };
+        
+        function GetPrice(id) {
+            var key = $("select[id = 'OrderDetail[" + id + "].ProductID']").val();
+
+            $.ajax({
+                type : "Get",
+                url : "/SelectOrder/GetPrice?arg=" + key ,
+                datatype : "json",
+                success: function (response) {
+                    $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val(response);
+                },
+                error: function (error) {
+                    console.log("error");
+                }
+
+            });
+            };
     </script>
+
