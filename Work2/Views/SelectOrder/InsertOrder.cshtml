@@ -95,10 +95,10 @@
                         row += "<option value = " + response[i].Value + ">" + response[i].Text + "</option>"
                     }
                     row += "</select></td>"
-                    row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' </td>" +
-                        "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' </td>" +
+                    row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' onchange= GetTotal(" + id +") ></td> " +
+                        "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' onchange= GetTotal("+id+") ></td> " +
                         "<td> <input type='text' id='Sum[" + id + "]' name = 'Sum[" + id + "]' </td>"+
-                        "<td><input type = 'button' onclick = 'del(this)' value = '刪除'></td></tr>"
+                        "<td><input type = 'button' onclick = 'del(this)' value = '刪除'></td></tr> "
                         
                     $("#detailtable").append(row);
                 },              
@@ -121,8 +121,13 @@
                 error: function (error) {
                     console.log("error");
                 }
-
             });
-            };
+        };
+        function GetTotal(id) {
+            var money = $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val();
+            $("input[id = 'Sum[" + id + "]']").val(money);      
+            
+        };
+
     </script>
 
