@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("InsertOrder", "SelectOrder", FormMethod.Post))
+@using (Html.BeginForm("InsertOrder", "SelectOrder", FormMethod.Post, new { onsubmit = "return CheckForm()" }))
 {
     <table>
         <tr>
@@ -98,7 +98,7 @@
                     row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' onchange= GetTotal(" + id +") ></td> " +
                         "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' onchange= GetTotal("+id+") ></td> " +
                         "<td> <input type='text' id='Sum[" + id + "]' name = 'Sum[" + id + "]' </td>"+
-                        "<td><input type = 'button' onclick = 'del(this)' value = '刪除'></td></tr> "
+                        "<td><input type = 'button' onclick = 'DelRow(this)' value = '刪除'></td></tr> "
                         
                     $("#detailtable").append(row);
                 },              
@@ -125,8 +125,50 @@
         };
         function GetTotal(id) {
             var money = $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val();
-            $("input[id = 'Sum[" + id + "]']").val(money);      
-            
+            $("input[id = 'Sum[" + id + "]']").val(money);                  
+        };
+        function DelRow(row) {
+            $(row).parent().parent().remove(); //移除选中的行  
+        };
+        function CheckForm() {
+            var tr = $("#detailtable").find("tr").length;
+            var form = true;
+            if (tr > 1) {                
+                for (var j = 0; j < tr; j++) {
+                    var p = 0,q = 0;                    
+                    if ($("input[id = 'OrderDetail[" + j + "].UnitPrice']").val() == "") {
+                        p += 1;
+                    }                        
+                    if ($("input[id = 'OrderDetail[" + j + "].Qty']").val() == "") {
+                        q += 1;                           
+                    }
+                    if (p == 1 && q == 1) {
+                        form = false;
+                        alert("沒輸入單價和數量");
+                        return form;
+                    } else if (p == 1) {
+                        form = false;
+                        alert("單價未輸入");
+                        return form;
+                    } else if (q == 1){
+                        form = false;
+                        alert("數量未輸入");
+                        return form;
+                    }
+                }
+                for (var k = 1; k < tr; k++) {
+                    if ($("select[id = 'OrderDetail[" + (k - 1) + "].ProductID']").val() == $("select[id = 'OrderDetail[" + k + "].ProductID']").val()) {
+                        form = false;
+                        alert("商品重複");
+                        return form;
+                    }
+                }
+            } else {
+                form = false;
+                alert("請新增明細");
+                return form;
+            }
+
         };
 
     </script>
