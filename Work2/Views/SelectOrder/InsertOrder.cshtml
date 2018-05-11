@@ -154,9 +154,9 @@
         function CheckForm() {
             var tr = $("#detailtable").find("tr").length;
             var form = true;
+            var p = 0, q = 0; 
             if (tr > 1) {                
-                for (var j = 0; j < tr; j++) {
-                    var p = 0,q = 0;                    
+                for (var j = 0; j < tr; j++) {                                       
                     if ($("input[id = 'OrderDetail[" + j + "].UnitPrice']").val() == "") {
                         p += 1;
                     }                        
@@ -177,12 +177,18 @@
                         return form;
                     }
                 }
-                for (var k = 1; k < tr; k++) {
-                    if ($("select[id = 'OrderDetail[" + (k - 1) + "].ProductID']").val() == $("select[id = 'OrderDetail[" + k + "].ProductID']").val()) {
-                        form = false;
-                        alert("商品重複");
-                        return form;
-                    }
+                for (var a = 0; a < tr; a++) {
+                    for (var b = 0; b < tr; b++) {
+                        if (a != b) {
+                            debugger
+                            if ($("select[id = 'OrderDetail[" + a + "].ProductID']").val() == $("select[id = 'OrderDetail[" + b + "].ProductID']").val()) {
+                                debugger
+                                form = false;
+                                alert("商品重複");
+                                return form;
+                            }
+                        }                        
+                    }                    
                 }
             } else {
                 form = false;

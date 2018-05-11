@@ -130,13 +130,13 @@ namespace Work2.Controllers
         public JsonResult InsertProduct()
         {
             OrderService orderService = new OrderService();
-            List<SelectListItem> result = orderService.GetOrderDetailList();
+            List<SelectListItem> result = orderService.GetOrderDetailList();///取得產品ID與價格
             return this.Json(result, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetPrice(string arg)
         {
             OrderService orderService = new OrderService();
-            string result = orderService.GetUnitPrice(arg);
+            string result = orderService.GetUnitPrice(arg);///取得Price
             return this.Json(result, JsonRequestBehavior.AllowGet);
         }
         

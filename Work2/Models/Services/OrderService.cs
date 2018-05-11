@@ -13,17 +13,17 @@ namespace Work2.Models.Services
     public class OrderService
     {
         private string GetConnStr()
-        {
+        {   ///取得資料庫連線帳密字串
             return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
         }
 
         public string Del(int orderid)
-        {
-            var messagebox = "";
+        {   
+            var messagebox = ""; ///動作訊息
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             String sql = @"Delete from Sales.OrderDetails where OrderID=@OrderID
-                           Delete from Sales.Orders where OrderID=@OrderID";
+                           Delete from Sales.Orders where OrderID=@OrderID"; ///先刪除明細再刪除訂單
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.Add(new SqlParameter("@OrderID", orderid));
             conn.Open();
@@ -121,9 +121,9 @@ namespace Work2.Models.Services
                         command.Parameters.Add(new SqlParameter("@ShipPostalCode", DBNull.Value));
                     }
                     command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
-                    conn.Open();
+                    conn.Open();///資料庫開始
 
-                    int orderid = Convert.ToInt32(command.ExecuteScalar());                    
+                    int orderid = Convert.ToInt32(command.ExecuteScalar());   ///取的最新的一筆第一欄第一列=orderid              
 
                     string detailsql = @"INSERT INTO Sales.OrderDetails (
                                         OrderID,
@@ -161,7 +161,7 @@ namespace Work2.Models.Services
             }
             finally
             {
-                conn.Close();
+                conn.Close(); ///資料庫關閉
             }
         }
         
@@ -175,6 +175,7 @@ namespace Work2.Models.Services
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             String sql = "Select OrderID,CompanyName,OrderDate,ShippedDate from Sales.Orders join Sales.Customers on Sales.Orders.CustomerID = Sales.Customers.CustomerID where ";
+            ///先判斷是否有值才加入條件字串
             if (arg.OrderID.HasValue)
             {
                 sql += "OrderID = @OrderID";
@@ -244,7 +245,7 @@ namespace Work2.Models.Services
             SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
             DataSet ds = new DataSet();
             dataAdapter.Fill(ds);
-            DataTable dataTable = ds.Tables[0];
+            DataTable dataTable = ds.Tables[0]; ///***
             return dataTable;
         }
         public List<SelectListItem> GetOrderDetailList()
@@ -261,8 +262,8 @@ namespace Work2.Models.Services
             {
                 orderDetailList.Add(new SelectListItem()
                 {
-                    Text = dataTable.Rows[i][1].ToString(),
-                    Value = dataTable.Rows[i][0].ToString()
+                    Text = dataTable.Rows[i][1].ToString(), ///產品名稱
+                    Value = dataTable.Rows[i][0].ToString() ///產品名稱ID
                 });
             }
             return orderDetailList;
