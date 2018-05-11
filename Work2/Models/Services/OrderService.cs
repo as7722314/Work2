@@ -16,44 +16,37 @@ namespace Work2.Models.Services
         {
             return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
         }
-        public static List<Order> GetOrder = new List<Order>()
-        {
-                new Order(){
-                    OrderID = 1,
-                    CustomerID = 1,
-                    EmployeeID = 1,
-                    OrderDate = new DateTime(2018,4,8),
-                    RequiredDate = new DateTime(2018,4,10),
-                    ShipperDate = new DateTime(2018,4,9),
-                    ShipperID = 1,
-                    Freight = 100,
-                    ShipAddress = "雲林縣北港鎮",
-                    ShipCity = "雲林縣",
-                    ShipRegion = "北港鎮",
-                    CitShipPostalCodey = "651",
-                    ShipCountry = "台灣"
 
-                },new Order(){
-                    OrderID = 2,
-                    CustomerID = 2,
-                    EmployeeID = 2,
-                    OrderDate = new DateTime(2018,4,8),
-                    RequiredDate = new DateTime(2018,4,10),
-                    ShipperDate = new DateTime(2018,4,9),
-                    ShipperID = 2,
-                    Freight = 5000,
-                    ShipAddress = "高雄市楠梓區",
-                    ShipCity = "高雄市",
-                    ShipRegion = "楠梓區",
-                    CitShipPostalCodey = "801",
-                    ShipCountry = "台灣"
-                }
-        };
-        public void Del(int orderid)
+        public string Del(int orderid)
         {
-            int id = GetOrder.FindIndex(m => m.OrderID == orderid);
-            GetOrder.RemoveAt(id);
-        }
+            var messagebox = "";
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            String sql = @"Delete from Sales.OrderDetails where OrderID=@OrderID
+                           Delete from Sales.Orders where OrderID=@OrderID";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.Add(new SqlParameter("@OrderID", orderid));
+            conn.Open();
+            SqlTransaction transaction = conn.BeginTransaction();
+            command.Transaction = transaction;
+            try
+            {
+                command.ExecuteNonQuery();
+                transaction.Commit();
+                messagebox = "刪除成功";
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                messagebox = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return messagebox;
+
+        }            
         public void InsertOrder(Order order)
         {
             String connStr = GetConnStr();
@@ -129,9 +122,22 @@ namespace Work2.Models.Services
                     }
                     command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
                     conn.Open();
-                    Int32 orderid = (int)command.ExecuteScalar();
-                    string detailsql = @"INSERT INTO Sales.OrderDetails (OrderID,ProductID,UnitPrice,Qty,Discount) VALUES(@OrderID,@ProductID,@UnitPrice,@Qty,@Discount)
-                                         select SCOPE_IDENTITY()";
+
+                    int orderid = Convert.ToInt32(command.ExecuteScalar());                    
+
+                    string detailsql = @"INSERT INTO Sales.OrderDetails (
+                                        OrderID,
+                                        ProductID,
+                                        UnitPrice,
+                                        Qty,Discount
+                                        ) VALUES(
+                                        @OrderID,
+                                        @ProductID,
+                                        @UnitPrice,
+                                        @Qty,
+                                        @Discount
+                                        )
+                                        select SCOPE_IDENTITY()";
                     SqlCommand detailcommand = new SqlCommand(detailsql, conn);
                     for (int i = 0; i < order.OrderDetail.Count; i++)
                     {
@@ -158,16 +164,10 @@ namespace Work2.Models.Services
                 conn.Close();
             }
         }
-        public Order GetOrders(int? orderid)
-        {
-            Order order = GetOrder.SingleOrDefault(m => m.OrderID == orderid);
-            return order;
-        }
+        
         public void Update(Order order)
         {
-            int id = GetOrder.FindIndex(m => m.OrderID == order.OrderID);
-            GetOrder.RemoveAt(id);
-            GetOrder.Insert(id, order);
+            
         }
         
         public DataTable GetOrderCondition(Index arg)

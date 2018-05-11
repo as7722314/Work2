@@ -14,7 +14,7 @@ namespace Work2.Controllers
         // GET: SelectOrder
         [HttpGet]
         public ActionResult Index()
-        {
+        {   ///員工、物流公司下拉是選單
             EmployeeService employeeService = new EmployeeService();
             ViewBag.employeelist = employeeService.GetEnameList();
             ShipperService shipperService = new ShipperService();
@@ -23,7 +23,7 @@ namespace Work2.Controllers
         }
         [HttpPost]
         public ActionResult SelectList(Index arg)
-        {
+        {   ///取得訂單資料
             OrderService orderService = new OrderService();
             ViewBag.Orderdata = orderService.GetOrderCondition(arg);
             return View();
@@ -92,8 +92,8 @@ namespace Work2.Controllers
             ///準備員工下拉式選單
             CustomerService customerservice = new CustomerService();
             List<SelectListItem> customeritems = customerservice.GetCustomerList();
-            ViewBag.customerlist = shippersitems;
-            return View(orderService.GetOrders(orderid));
+            ///ViewBag.customerlist = shippersitems;
+            return View();
 
 
         }
@@ -123,7 +123,7 @@ namespace Work2.Controllers
                 CustomerService customerservice = new CustomerService();
                 List<SelectListItem> customeritems = customerservice.GetCustomerList();
                 ViewBag.customerlist = customeritems;
-                return View(orderService.GetOrders(arg.OrderID));
+                return View();
             }
         }
         [HttpGet]
