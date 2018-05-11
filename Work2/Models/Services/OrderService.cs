@@ -5,11 +5,17 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Transactions;
+
 
 namespace Work2.Models.Services
 {
     public class OrderService
     {
+        private string GetConnStr()
+        {
+            return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
+        }
         public static List<Order> GetOrder = new List<Order>()
         {
                 new Order(){
@@ -42,7 +48,7 @@ namespace Work2.Models.Services
                     CitShipPostalCodey = "801",
                     ShipCountry = "台灣"
                 }
-        };      
+        };
         public void Del(int orderid)
         {
             int id = GetOrder.FindIndex(m => m.OrderID == orderid);
@@ -50,8 +56,107 @@ namespace Work2.Models.Services
         }
         public void InsertOrder(Order order)
         {
-            order.OrderID = GetOrder.Count + 1;///orderid +1 
-            GetOrder.Add(order);///新的訂單資料加進去            
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    string ordersql = @"INSERT INTO Sales.Orders (
+                                    CustomerID,
+                                    EmployeeID,
+                                    OrderDate,
+                                    RequiredDate,
+                                    ShippedDate,
+                                    ShipperID,
+                                    Freight,
+                                    ShipName,
+                                    ShipAddress,
+                                    ShipCity,
+                                    ShipRegion,
+                                    ShipPostalCode,
+                                    ShipCountry
+                                    ) 
+                                    VALUES (
+                                    @CustomerID,
+                                    @EmployeeID, 
+                                    @OrderDate, 
+                                    @RequiredDate,
+                                    @ShippedDate,
+                                    @ShipperID, 
+                                    @Freight,
+                                    @ShipName, 
+                                    @ShipAddress,
+                                    @ShipCity, 
+                                    @ShipRegion,
+                                    @ShipPostalCode, 
+                                    @ShipCountry
+                                    )
+                                    select SCOPE_IDENTITY()";
+                    SqlCommand command = new SqlCommand(ordersql, conn);
+                    command.Parameters.Add(new SqlParameter("@CustomerID", order.CustomerID));
+                    command.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
+                    command.Parameters.Add(new SqlParameter("@OrderDate", order.OrderDate));
+                    command.Parameters.Add(new SqlParameter("@RequiredDate", order.RequiredDate));
+                    if (order.ShipperDate.HasValue)
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShippedDate", DBNull.Value));
+                    }
+                    command.Parameters.Add(new SqlParameter("@ShipperID", order.ShipperID));
+                    command.Parameters.Add(new SqlParameter("@Freight", order.Freight));
+                    command.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
+                    command.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
+                    command.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
+                    if (!string.IsNullOrWhiteSpace(order.ShipRegion))
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipRegion", DBNull.Value));
+                    }
+                    if (!string.IsNullOrWhiteSpace(order.CitShipPostalCodey))
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", DBNull.Value));
+                    }
+                    command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
+                    conn.Open();
+                    Int32 orderid = (int)command.ExecuteScalar();
+                    string detailsql = @"INSERT INTO Sales.OrderDetails (OrderID,ProductID,UnitPrice,Qty,Discount) VALUES(@OrderID,@ProductID,@UnitPrice,@Qty,@Discount)
+                                         select SCOPE_IDENTITY()";
+                    SqlCommand detailcommand = new SqlCommand(detailsql, conn);
+                    for (int i = 0; i < order.OrderDetail.Count; i++)
+                    {
+                        detailcommand.Parameters.Add(new SqlParameter("@OrderID", orderid));
+                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
+                        detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));
+                        detailcommand.Parameters.Add(new SqlParameter("@Qty", order.OrderDetail[i].Qty));
+                        detailcommand.Parameters.Add(new SqlParameter("@Discount", "0"));
+                        detailcommand.ExecuteScalar();
+                        detailcommand.Parameters.Clear();
+                    }
+                    scope.Complete();
+                    scope.Dispose();
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
         public Order GetOrders(int? orderid)
         {
@@ -64,16 +169,13 @@ namespace Work2.Models.Services
             GetOrder.RemoveAt(id);
             GetOrder.Insert(id, order);
         }
-        private string GetConnStr()
-        {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
-        }
+        
         public DataTable GetOrderCondition(Index arg)
         {
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             String sql = "Select OrderID,CompanyName,OrderDate,ShippedDate from Sales.Orders join Sales.Customers on Sales.Orders.CustomerID = Sales.Customers.CustomerID where ";
-            if(arg.OrderID.HasValue)
+            if (arg.OrderID.HasValue)
             {
                 sql += "OrderID = @OrderID";
             }
@@ -105,8 +207,8 @@ namespace Work2.Models.Services
             {
                 sql += " and ShipperedDate = @ShipperDate";
             }
-            SqlCommand command = new SqlCommand(sql,conn);
-            
+            SqlCommand command = new SqlCommand(sql, conn);
+
             if (arg.OrderID.HasValue)
             {
                 command.Parameters.Add(new SqlParameter("@OrderID", arg.OrderID));
@@ -171,7 +273,7 @@ namespace Work2.Models.Services
             SqlConnection conn = new SqlConnection(connStr);
             String sql = "Select UnitPrice from Production.Products where ProductID = @ProductID";
             SqlCommand command = new SqlCommand(sql, conn);
-            command.Parameters.Add(new SqlParameter("@ProductID", arg));        
+            command.Parameters.Add(new SqlParameter("@ProductID", arg));
             SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
             DataSet ds = new DataSet();
             dataAdapter.Fill(ds);
