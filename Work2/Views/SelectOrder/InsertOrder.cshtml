@@ -97,7 +97,7 @@
                     row += "</select></td>"
                     row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' onchange= GetTotal(" + id +") ></td> " +
                         "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' onchange= GetTotal("+id+") ></td> " +
-                        "<td> <input type='text' id='Sum[" + id + "]' name = 'Sum[" + id + "]' </td>"+
+                        "<td> <input type='text' id='Sum" + id + "' name = 'Sum" + id + "' </td>"+
                         "<td><input type = 'button' onclick = 'DelRow(this)' value = '刪除'></td></tr> "
                         
                     $("#detailtable").append(row);
@@ -125,10 +125,28 @@
         };
         function GetTotal(id) {
             var money = $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val();
-            $("input[id = 'Sum[" + id + "]']").val(money);                  
+            $("#Sum" + id).val(money);                  
         };
         function DelRow(row) {
             $(row).parent().parent().remove(); //移除选中的行  
+            if (($("#detailtable").find("tr").length - 1) >= 1) {
+                for (var a = 0; a < $("#detailtable").find("tr").length - 1; a++) {
+                    $('table select')[a + 3].id = "OrderDetail[" + a + "].ProductID";
+                    $('table select')[a + 3].name = "OrderDetail[" + a + "].ProductID";
+                    $("select[id='OrderDetail[" + a + "].ProductID']").attr("onchange", "GetPrice(" + a + ")")
+                }
+                var c = $("#detailtable").find("tr").length - 2;
+                for (var b = $('table input').length - 2; b >= 9; b = b - 4) {
+                    $('table input')[b].id = "Sum" + c;
+                    $('table input')[b - 1].id = "OrderDetail[" + c + "].Qty";
+                    $('table input')[b - 1].name = "OrderDetail[" + c + "].Qty";
+                    $('table input')[b - 2].id = "OrderDetail[" + c + "].UnitPrice";
+                    $('table input')[b - 2].name = "OrderDetail[" + c + "].UnitPrice";
+                    $("input[id='OrderDetails[" + c + "].Qty']").attr("onchange", "GetTotal(" + c + ")")
+                    $("input[id='OrderDetails[" + c + "].UnitPrice']").attr("onchange", "GetTotal(" + c + ")")
+                    c = c - 1;
+                }
+            }
         };
         function CheckForm() {
             var tr = $("#detailtable").find("tr").length;

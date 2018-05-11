@@ -139,6 +139,6 @@ namespace Work2.Controllers
             string result = orderService.GetUnitPrice(arg);
             return this.Json(result, JsonRequestBehavior.AllowGet);
         }
-        ///http://white1027.blogspot.tw/2013/06/js-jquery.html
+        
     }
 }
