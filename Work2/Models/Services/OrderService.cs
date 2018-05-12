@@ -281,5 +281,22 @@ namespace Work2.Models.Services
             DataTable dataTable = ds.Tables[0];
             return dataTable.Rows[0][0].ToString();
         }
+        public Order GetOrders(int orderid)
+        {
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            
+            String sql = "Select * from Sales.Orders join Sales.OrderDetails on Sales.Orders.OrderID=Sales.OrderDetails.OrderID where OrderID=@OrderID";
+            SqlCommand command = new SqlCommand(sql,conn);
+            command.Parameters.Add(new SqlParameter("@OrderID", orderid));
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            DataSet ds = new DataSet();
+            dataAdapter.Fill(ds);
+            DataTable dataTable = ds.Tables[0]; ///***
+            for(int i = 0; i < dataTable.Rows.Count; i++)
+            {
+
+            }
+        }
     }
 }

@@ -50,14 +50,14 @@ namespace Work2.Controllers
         [HttpPost]
         public ActionResult InsertOrder(Order arg)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid)///model驗證成功就執行
             {
                 ModelState.Clear();
                 OrderService orderService = new OrderService();
                 orderService.InsertOrder(arg);
                 return RedirectToAction("Index", "SelectOrder");
             }
-            else
+            else   ///驗證失敗就返回
             {
                 EmployeeService employeeService = new EmployeeService();
                 ViewBag.employeelist = employeeService.GetEnameList();
@@ -78,7 +78,9 @@ namespace Work2.Controllers
         {
             ///獲得訂單資料
             OrderService orderService = new OrderService();
-
+            Order orderdata = orderService.GetOrders(orderid);
+            ///取得產品資料
+            List<SelectListItem> productitems = orderService.GetOrderDetailList();
             ///準備員工下拉式選單           
             EmployeeService employeeservice = new EmployeeService();
             List<SelectListItem> employeeitems = employeeservice.GetEnameList();
@@ -92,8 +94,8 @@ namespace Work2.Controllers
             ///準備員工下拉式選單
             CustomerService customerservice = new CustomerService();
             List<SelectListItem> customeritems = customerservice.GetCustomerList();
-            ///ViewBag.customerlist = shippersitems;
-            return View();
+            ViewBag.customerlist = shippersitems;
+            return View(orderdata);
 
 
         }
