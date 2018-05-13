@@ -286,17 +286,64 @@ namespace Work2.Models.Services
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             
-            String sql = "Select * from Sales.Orders join Sales.OrderDetails on Sales.Orders.OrderID=Sales.OrderDetails.OrderID where OrderID=@OrderID";
+            String sql = @"Select sales.Orders.OrderID,
+                            CustomerID,
+                            EmployeeID,
+                            OrderDate,
+                            RequiredDate,
+                            ShippedDate,
+                            ShipperID,
+                            Freight,
+                            ShipName, 
+                            ShipAddress,
+                            ShipCity,
+                            ShipRegion,
+                            ShipPostalCode,
+                            ShipCountry,
+                            ProductID,
+                            UnitPrice,
+                            Qty,
+                            Discount
+                           from Sales.Orders join Sales.OrderDetails 
+                           on Sales.Orders.OrderID=Sales.OrderDetails.OrderID 
+                           where Sales.Orders.OrderID=@OrderID";
             SqlCommand command = new SqlCommand(sql,conn);
             command.Parameters.Add(new SqlParameter("@OrderID", orderid));
             SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
             DataSet ds = new DataSet();
             dataAdapter.Fill(ds);
             DataTable dataTable = ds.Tables[0]; ///***
+            List<OrderDetail> orderdetail = new List<OrderDetail>();
             for(int i = 0; i < dataTable.Rows.Count; i++)
             {
-
+                OrderDetail detail = new OrderDetail(); ///創立一個OrderDetail物件
+                detail.OrderID = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
+                detail.ProductID = Convert.ToInt32(ds.Tables[0].Rows[i][14]);
+                detail.UnitPrice = Convert.ToDecimal(ds.Tables[0].Rows[i][15]);
+                detail.Qty = Convert.ToInt32(ds.Tables[0].Rows[i][16]);
+                detail.Discount = Convert.ToDouble(ds.Tables[0].Rows[i][17]);
+                orderdetail.Add(detail);
             }
+            Order order = new Order() ///加入orderDetail到Order
+            {
+                OrderID = Convert.ToInt32(ds.Tables[0].Rows[0][0]),
+                CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0][1]),
+                EmployeeID = Convert.ToInt32(ds.Tables[0].Rows[0][2]),
+                OrderDate = Convert.ToDateTime(ds.Tables[0].Rows[0][3]),
+                RequiredDate = Convert.ToDateTime(ds.Tables[0].Rows[0][4]),
+                ShipperDate = Convert.ToDateTime(ds.Tables[0].Rows[0][5]),
+                ShipperID = Convert.ToInt32(ds.Tables[0].Rows[0][6]),
+                Freight = Convert.ToDecimal(ds.Tables[0].Rows[0][7]),
+                ShipName = ds.Tables[0].Rows[0][8].ToString(),
+                ShipAddress = ds.Tables[0].Rows[0][9].ToString(),
+                ShipCity = ds.Tables[0].Rows[0][10].ToString(),
+                ShipRegion = ds.Tables[0].Rows[0][11].ToString(),
+                CitShipPostalCodey = ds.Tables[0].Rows[0][12].ToString(),
+                ShipCountry = ds.Tables[0].Rows[0][13].ToString(),
+                OrderDetail = orderdetail
+            };
+            return order;
+
         }
     }
 }

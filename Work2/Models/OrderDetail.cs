@@ -13,6 +13,6 @@ namespace Work2.Models
         public int ProductID { get; set; }
         public decimal UnitPrice { get; set; }
         public int Qty { get; set; }
-        public int? Discount { get; set; }
+        public double? Discount { get; set; }
     }
 }

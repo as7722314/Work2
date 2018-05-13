@@ -81,6 +81,7 @@ namespace Work2.Controllers
             Order orderdata = orderService.GetOrders(orderid);
             ///取得產品資料
             List<SelectListItem> productitems = orderService.GetOrderDetailList();
+            ViewBag.productitems = productitems;
             ///準備員工下拉式選單           
             EmployeeService employeeservice = new EmployeeService();
             List<SelectListItem> employeeitems = employeeservice.GetEnameList();
