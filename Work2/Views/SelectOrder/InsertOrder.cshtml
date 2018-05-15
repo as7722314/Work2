@@ -179,10 +179,8 @@
                 }
                 for (var a = 0; a < tr; a++) {
                     for (var b = 0; b < tr; b++) {
-                        if (a != b) {
-                            debugger
-                            if ($("select[id = 'OrderDetail[" + a + "].ProductID']").val() == $("select[id = 'OrderDetail[" + b + "].ProductID']").val()) {
-                                debugger
+                        if (a != b) {                            
+                            if ($("select[id = 'OrderDetail[" + a + "].ProductID']").val() == $("select[id = 'OrderDetail[" + b + "].ProductID']").val()) {                                
                                 form = false;
                                 alert("商品重複");
                                 return form;

@@ -89,14 +89,21 @@
             <th>小計</th>
             <th>動作</th>
         </tr>
-        @for (var i = 0; i < Model.OrderDetail.Count; i++)
+        @for (var id = 0; id < Model.OrderDetail.Count; id++)
         {
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>@Html.DropDownList("OrderDetail[" + id + "].ProductID", new SelectList((List<SelectListItem>)ViewBag.productitems, "Value", "Text", Model.OrderDetail[id].ProductID), new { onchange = "GetPrice(" + id + ")", id = "OrderDetail[" + id + "].ProductID" })</td>
+            @Html.ValidationMessageFor(m => m.OrderDetail[id].ProductID)
+
+            <td>@Html.TextBoxFor(model => model.OrderDetail[id].UnitPrice, new { onchange = "GetTotal(" + id + ")", id = "OrderDetail[" + id + "].UnitPrice", name = "OrderDetail[" + id + "].UnitPrice" })</td>
+            @Html.ValidationMessageFor(m => m.OrderDetail[id].UnitPrice)
+
+            <td>@Html.TextBoxFor(model => model.OrderDetail[id].Qty, new { onchange = "GetTotal(" + id + ")", id = "OrderDetail[" + id + "].Qty", name = "OrderDetail[" + id + "].Qty" })</td>
+            @Html.ValidationMessageFor(m => m.OrderDetail[id].Qty)
+
+            <td>@Html.TextBox("Sum" + id, Model.OrderDetail[id].UnitPrice * Model.OrderDetail[id].Qty)</td>
+
+            <td><input type='button' onclick='DelRow(this)' value='刪除'></td>
         </tr>
         }
 

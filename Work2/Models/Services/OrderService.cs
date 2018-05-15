@@ -11,12 +11,20 @@ using System.Transactions;
 namespace Work2.Models.Services
 {
     public class OrderService
-    {
+    {   
+        /// <summary>
+        /// 取得資料庫連線帳密字串
+        /// </summary>
+        /// <returns></returns>
         private string GetConnStr()
-        {   ///取得資料庫連線帳密字串
+        {  
             return System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnect"].ConnectionString;
         }
-
+        /// <summary>
+        /// 刪除訂單
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <returns></returns>
         public string Del(int orderid)
         {   
             var messagebox = ""; ///動作訊息
@@ -46,7 +54,11 @@ namespace Work2.Models.Services
             }
             return messagebox;
 
-        }            
+        }
+        /// <summary>
+        /// 新增訂單
+        /// </summary>
+        /// <param name="order"></param>
         public void InsertOrder(Order order)
         {
             String connStr = GetConnStr();
@@ -91,35 +103,14 @@ namespace Work2.Models.Services
                     command.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
                     command.Parameters.Add(new SqlParameter("@OrderDate", order.OrderDate));
                     command.Parameters.Add(new SqlParameter("@RequiredDate", order.RequiredDate));
-                    if (order.ShipperDate.HasValue)
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate));
-                    }
-                    else
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShippedDate", DBNull.Value));
-                    }
+                    command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate.HasValue ? order.ShipperDate.Value.ToString("yyyy/MM/dd") : ""));                    
                     command.Parameters.Add(new SqlParameter("@ShipperID", order.ShipperID));
                     command.Parameters.Add(new SqlParameter("@Freight", order.Freight));
                     command.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
                     command.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
                     command.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
-                    if (!string.IsNullOrWhiteSpace(order.ShipRegion))
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion));
-                    }
-                    else
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShipRegion", DBNull.Value));
-                    }
-                    if (!string.IsNullOrWhiteSpace(order.CitShipPostalCodey))
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey));
-                    }
-                    else
-                    {
-                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", DBNull.Value));
-                    }
+                    command.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion ?? ""));
+                    command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey ?? ""));                    
                     command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
                     conn.Open();///資料庫開始
 
@@ -164,12 +155,119 @@ namespace Work2.Models.Services
                 conn.Close(); ///資料庫關閉
             }
         }
-        
+        /// <summary>
+        /// 修改訂單
+        /// </summary>
+        /// <param name="order"></param>
         public void Update(Order order)
         {
-            
+            String connStr = GetConnStr();
+            SqlConnection conn = new SqlConnection(connStr);
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    string updatesql = @"Update Sales.Orders Set 
+                                        CustomerID=@CustomerID,
+                                        EmployeeID=@EmployeeID,
+                                        OrderDate=@OrderDate, 
+                                        RequiredDate=@RequiredDate,
+                                        ShippedDate=@ShippedDate,
+                                        ShipperID=@ShipperID,
+                                        Freight=@Freight,
+                                        ShipName=@ShipName,
+                                        ShipAddress=@ShipAddress,
+                                        ShipCity=@ShipCity,
+                                        ShipRegion=@ShipRegion,
+                                        ShipPostalCode=@ShipPostalCode,
+                                        ShipCountry=@ShipCountry
+                                        Where OrderID = @OrderID";
+                    SqlCommand command = new SqlCommand(updatesql, conn);
+                    command.Parameters.Add(new SqlParameter("@OrderID", order.OrderID));
+                    command.Parameters.Add(new SqlParameter("@CustomerID", order.CustomerID));
+                    command.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
+                    command.Parameters.Add(new SqlParameter("@OrderDate", order.OrderDate));
+                    command.Parameters.Add(new SqlParameter("@RequiredDate", order.RequiredDate));
+                    if (order.ShipperDate.HasValue)
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShippedDate", DBNull.Value));
+                    }
+                    command.Parameters.Add(new SqlParameter("@ShipperID", order.ShipperID));
+                    command.Parameters.Add(new SqlParameter("@Freight", order.Freight));
+                    command.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
+                    command.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
+                    command.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
+                    if (!string.IsNullOrWhiteSpace(order.ShipRegion))
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipRegion", DBNull.Value));
+                    }
+                    if (!string.IsNullOrWhiteSpace(order.CitShipPostalCodey))
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@ShipPostalCode", DBNull.Value));
+                    }
+                    command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
+                    conn.Open();///資料庫開始
+                    command.ExecuteNonQuery();
+
+                    string delsql = @"Delete from Sales.OrderDetails where OrderID=@OrderID";
+                    SqlCommand dcommand = new SqlCommand(delsql, conn);
+                    dcommand.Parameters.Add(new SqlParameter("@OrderID", order.OrderID));                
+                    dcommand.ExecuteNonQuery();
+                    string insertsql = @"INSERT INTO Sales.OrderDetails (
+                                        OrderID,
+                                        ProductID,
+                                        UnitPrice,
+                                        Qty,Discount
+                                        ) VALUES(
+                                        @OrderID,
+                                        @ProductID,
+                                        @UnitPrice,
+                                        @Qty,
+                                        @Discount
+                                        )
+                                        select SCOPE_IDENTITY()";
+                    SqlCommand detailcommand = new SqlCommand(insertsql, conn);
+                    for (int i = 0; i < order.OrderDetail.Count; i++)
+                    {
+                        detailcommand.Parameters.Add(new SqlParameter("@OrderID", order.OrderID));
+                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
+                        detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));
+                        detailcommand.Parameters.Add(new SqlParameter("@Qty", order.OrderDetail[i].Qty));
+                        detailcommand.Parameters.Add(new SqlParameter("@Discount", "0"));
+                        detailcommand.ExecuteScalar();
+                        detailcommand.Parameters.Clear();
+                    }                    
+                    scope.Complete();
+                    scope.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                conn.Close(); ///資料庫關閉
+            }
+
         }
-        
+        /// <summary>
+        /// 條件式搜尋
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public DataTable GetOrderCondition(Index arg)
         {
             String connStr = GetConnStr();
@@ -248,6 +346,10 @@ namespace Work2.Models.Services
             DataTable dataTable = ds.Tables[0]; ///***
             return dataTable;
         }
+        /// <summary>
+        /// 取得產品ID與名稱
+        /// </summary>
+        /// <returns></returns>
         public List<SelectListItem> GetOrderDetailList()
         {
             String connStr = GetConnStr();
@@ -268,6 +370,11 @@ namespace Work2.Models.Services
             }
             return orderDetailList;
         }
+        /// <summary>
+        /// 取得產品價格
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public String GetUnitPrice(string arg)
         {
             String connStr = GetConnStr();
@@ -281,11 +388,16 @@ namespace Work2.Models.Services
             DataTable dataTable = ds.Tables[0];
             return dataTable.Rows[0][0].ToString();
         }
+        /// <summary>
+        /// 取得修改頁面的訂單資料
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <returns></returns>
         public Order GetOrders(int orderid)
         {
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
-            
+
             String sql = @"Select sales.Orders.OrderID,
                             CustomerID,
                             EmployeeID,
@@ -307,43 +419,43 @@ namespace Work2.Models.Services
                            from Sales.Orders join Sales.OrderDetails 
                            on Sales.Orders.OrderID=Sales.OrderDetails.OrderID 
                            where Sales.Orders.OrderID=@OrderID";
-            SqlCommand command = new SqlCommand(sql,conn);
+            SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.Add(new SqlParameter("@OrderID", orderid));
             SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
             DataSet ds = new DataSet();
             dataAdapter.Fill(ds);
             DataTable dataTable = ds.Tables[0]; ///***
-            List<OrderDetail> orderdetail = new List<OrderDetail>();
-            for(int i = 0; i < dataTable.Rows.Count; i++)
+            List<OrderDetail> detail = new List<OrderDetail>();
+            Order order = new Order();///加入orderDetail到Order
+            foreach (DataRow i in ds.Tables[0].Rows)
             {
-                OrderDetail detail = new OrderDetail(); ///創立一個OrderDetail物件
-                detail.OrderID = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
-                detail.ProductID = Convert.ToInt32(ds.Tables[0].Rows[i][14]);
-                detail.UnitPrice = Convert.ToDecimal(ds.Tables[0].Rows[i][15]);
-                detail.Qty = Convert.ToInt32(ds.Tables[0].Rows[i][16]);
-                detail.Discount = Convert.ToDouble(ds.Tables[0].Rows[i][17]);
-                orderdetail.Add(detail);
+                detail.Add(new OrderDetail
+                {
+                    OrderID = Convert.ToInt32(i["OrderID"]),
+                    ProductID = Convert.ToInt32(i["ProductID"]),
+                    UnitPrice = Convert.ToDecimal(i["UnitPrice"]),
+                    Qty = Convert.ToInt32(i["Qty"]),
+                    Discount = Convert.ToDouble(i["Discount"])
+                });
+                order.OrderID = Convert.ToInt32(i["OrderID"]);
+                order.CustomerID = Convert.ToInt32(i["CustomerID"]);
+                order.EmployeeID = Convert.ToInt32(i["EmployeeID"]);
+                order.OrderDate = Convert.ToDateTime(i["OrderDate"]);
+                order.RequiredDate = Convert.ToDateTime(i["RequiredDate"]);
+                order.ShipperDate = (!String.IsNullOrWhiteSpace(i["ShippedDate"].ToString()) ? new DateTime?(Convert.ToDateTime(i["ShippedDate"])) : null);
+                order.ShipperID = Convert.ToInt32(i["ShipperID"]);
+                order.Freight = Convert.ToDecimal(i["Freight"]);
+                order.Freight = Convert.ToDecimal(i["Freight"]);
+                order.Freight = Convert.ToDecimal(i["Freight"]);
+                order.ShipName = i["ShipName"].ToString();
+                order.ShipAddress = i["ShipAddress"].ToString();
+                order.ShipCity = i["ShipCity"].ToString();
+                order.ShipRegion = i["ShipRegion"].ToString();
+                order.CitShipPostalCodey = i["ShipPostalCode"].ToString();
+                order.ShipCountry = i["ShipCountry"].ToString();
+                order.OrderDetail = detail;
             }
-            Order order = new Order() ///加入orderDetail到Order
-            {
-                OrderID = Convert.ToInt32(ds.Tables[0].Rows[0][0]),
-                CustomerID = Convert.ToInt32(ds.Tables[0].Rows[0][1]),
-                EmployeeID = Convert.ToInt32(ds.Tables[0].Rows[0][2]),
-                OrderDate = Convert.ToDateTime(ds.Tables[0].Rows[0][3]),
-                RequiredDate = Convert.ToDateTime(ds.Tables[0].Rows[0][4]),
-                ShipperDate = Convert.ToDateTime(ds.Tables[0].Rows[0][5]),
-                ShipperID = Convert.ToInt32(ds.Tables[0].Rows[0][6]),
-                Freight = Convert.ToDecimal(ds.Tables[0].Rows[0][7]),
-                ShipName = ds.Tables[0].Rows[0][8].ToString(),
-                ShipAddress = ds.Tables[0].Rows[0][9].ToString(),
-                ShipCity = ds.Tables[0].Rows[0][10].ToString(),
-                ShipRegion = ds.Tables[0].Rows[0][11].ToString(),
-                CitShipPostalCodey = ds.Tables[0].Rows[0][12].ToString(),
-                ShipCountry = ds.Tables[0].Rows[0][13].ToString(),
-                OrderDetail = orderdetail
-            };
             return order;
-
         }
     }
 }
