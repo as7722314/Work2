@@ -132,6 +132,8 @@ namespace Work2.Models.Services
                     SqlCommand detailcommand = new SqlCommand(detailsql, conn);
                     for (int i = 0; i < order.OrderDetail.Count; i++)
                     {
+                        if (order.OrderDetail[i].ProductID == 0)
+                            continue;
                         detailcommand.Parameters.Add(new SqlParameter("@OrderID", orderid));
                         detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
                         detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));

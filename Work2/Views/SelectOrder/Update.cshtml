@@ -103,7 +103,7 @@
 
             <td>@Html.TextBox("Sum" + id, Model.OrderDetail[id].UnitPrice * Model.OrderDetail[id].Qty)</td>
 
-            <td><input type='button' onclick='DelRow(this)' value='刪除'></td>
+            <td><input type='button' onclick='DelRow(@id)' value='刪除'></td>
         </tr>
         }
 
@@ -151,7 +151,7 @@
             });
         };
         function GetTotal(id) {
-            var money = $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val();
+            var money = Math.round($("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val());
             $("#Sum" + id).val(money);
         };
         function DelRow(row) {

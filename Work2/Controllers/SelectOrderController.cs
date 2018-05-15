@@ -49,7 +49,7 @@ namespace Work2.Controllers
         }
         [HttpPost]
         public ActionResult InsertOrder(Order arg)
-        {
+        { 
             if (ModelState.IsValid)///model驗證成功就執行
             {
                 ModelState.Clear();

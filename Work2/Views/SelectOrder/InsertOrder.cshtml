@@ -93,7 +93,7 @@
                 datatype : "json",
                 success: function (response) {
                     var id = $("#detailtable").find("tr").length-1
-                    row = "<tr><td><select id = 'OrderDetail[" + id + "].ProductID' name = 'OrderDetail[" + id + "].ProductID' onchange = 'GetPrice("+id+")'>"
+                    row = "<tr id='row_"+id+"'><td><select id = 'OrderDetail[" + id + "].ProductID' name = 'OrderDetail[" + id + "].ProductID' onchange = 'GetPrice("+id+")'>"
                     for (var i=0;i<response.length;i++){
                         row += "<option value = " + response[i].Value + ">" + response[i].Text + "</option>"
                     }
@@ -101,7 +101,7 @@
                     row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' onchange= GetTotal(" + id +") ></td> " +
                         "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' onchange= GetTotal("+id+") ></td> " +
                         "<td> <input type='text' id='Sum" + id + "' name = 'Sum" + id + "' </td>"+
-                        "<td><input type = 'button' onclick = 'DelRow(this)' value = '刪除'></td></tr> "
+                        "<td><input type = 'button' onclick = 'DelRow("+id+")' value = '刪除'></td></tr> "
                         
                     $("#detailtable").append(row);
                 },              
@@ -127,74 +127,14 @@
             });
         };
         function GetTotal(id) {
-            var money = $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val();
+            var money = Math.round($("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val());
             $("#Sum" + id).val(money);                  
         };
-        function DelRow(row) {
-            $(row).parent().parent().remove(); //移除选中的行  
-            if (($("#detailtable").find("tr").length - 1) >= 1) {
-                for (var a = 0; a < $("#detailtable").find("tr").length - 1; a++) {
-                    $('table select')[a + 3].id = "OrderDetail[" + a + "].ProductID";
-                    $('table select')[a + 3].name = "OrderDetail[" + a + "].ProductID";
-                    $("select[id='OrderDetail[" + a + "].ProductID']").attr("onchange", "GetPrice(" + a + ")")
-                }
-                var c = $("#detailtable").find("tr").length - 2;
-                for (var b = $('table input').length - 2; b >= 9; b = b - 4) {
-                    $('table input')[b].id = "Sum" + c;
-                    $('table input')[b - 1].id = "OrderDetail[" + c + "].Qty";
-                    $('table input')[b - 1].name = "OrderDetail[" + c + "].Qty";
-                    $('table input')[b - 2].id = "OrderDetail[" + c + "].UnitPrice";
-                    $('table input')[b - 2].name = "OrderDetail[" + c + "].UnitPrice";
-                    $("input[id='OrderDetails[" + c + "].Qty']").attr("onchange", "GetTotal(" + c + ")")
-                    $("input[id='OrderDetails[" + c + "].UnitPrice']").attr("onchange", "GetTotal(" + c + ")")
-                    c = c - 1;
-                }
-            }
+        function DelRow(id) {
+            $('#row_' + id).hide();
+            $("select[id = 'OrderDetail[" + id + "].ProductID']").val(0);
         };
-        function CheckForm() {
-            var tr = $("#detailtable").find("tr").length;
-            var form = true;
-            var p = 0, q = 0; 
-            if (tr > 1) {                
-                for (var j = 0; j < tr; j++) {                                       
-                    if ($("input[id = 'OrderDetail[" + j + "].UnitPrice']").val() == "") {
-                        p += 1;
-                    }                        
-                    if ($("input[id = 'OrderDetail[" + j + "].Qty']").val() == "") {
-                        q += 1;                           
-                    }
-                    if (p == 1 && q == 1) {
-                        form = false;
-                        alert("沒輸入單價和數量");
-                        return form;
-                    } else if (p == 1) {
-                        form = false;
-                        alert("單價未輸入");
-                        return form;
-                    } else if (q == 1){
-                        form = false;
-                        alert("數量未輸入");
-                        return form;
-                    }
-                }
-                for (var a = 0; a < tr; a++) {
-                    for (var b = 0; b < tr; b++) {
-                        if (a != b) {                            
-                            if ($("select[id = 'OrderDetail[" + a + "].ProductID']").val() == $("select[id = 'OrderDetail[" + b + "].ProductID']").val()) {                                
-                                form = false;
-                                alert("商品重複");
-                                return form;
-                            }
-                        }                        
-                    }                    
-                }
-            } else {
-                form = false;
-                alert("請新增商品");
-                return form;
-            }
-
-        };
+        
 
     </script>
 
