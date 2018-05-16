@@ -131,8 +131,18 @@
             $("#Sum" + id).val(money);                  
         };
         function DelRow(id) {
-            $('#row_' + id).hide();
-            $("select[id = 'OrderDetail[" + id + "].ProductID']").val(0);
+            $('#row_' + id).hide();            
+            $("select[id = 'OrderDetail[" + id + "].ProductID']").val(null);
+        
+        };
+        function CheckForm() {
+            var form = true;
+            tr = $("#detailtable").find("tr").length;
+            if (tr == 1) {
+                form = false;
+                alert("請新增商品明細");
+                return form;
+            }
         };
         
 
