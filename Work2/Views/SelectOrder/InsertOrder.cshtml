@@ -150,8 +150,8 @@
             }else{
                 var name = $("select[id = 'OrderDetail[" + i + "].ProductID']").val();
                 temp.push(name);   
-                var P=$("select[id = 'OrderDetail[" + i + "].UnitPrice']").val();
-                var Q=$("select[id = 'OrderDetail[" + i + "].Qty']").val();
+                var P=$("input[id = 'OrderDetail[" + i + "].UnitPrice']").val();
+                var Q=$("input[id = 'OrderDetail[" + i + "].Qty']").val();
                 if(P == 0 || Q == 0 ){
                     form = false;
                     alert("價格或數量未輸入");
