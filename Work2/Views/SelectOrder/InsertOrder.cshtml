@@ -7,70 +7,70 @@
 
 @using (Html.BeginForm("InsertOrder", "SelectOrder", FormMethod.Post, new { onsubmit = "return CheckForm()" }))
 {
-<table>
-    <tr>
-        <td>@Html.LabelFor(model => model.CustomerID)</td>
-        <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...")</td>
-        <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.EmployeeID)</td>
-        <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...")</td>
-        <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.OrderDate)</td>
-        <td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.RequiredDate)</td>
-        <td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipperDate)</td>
-        <td>@Html.TextBoxFor(model => model.ShipperDate, new { @type = "date", @class = "form-control" })</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipperID)</td>
-        <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperlist, "請選擇...")</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipperID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipName)</td>
-        <td>@Html.TextBoxFor(model => model.ShipName, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipName)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.Freight)</td>
-        <td>@Html.TextBoxFor(model => model.Freight, new { type = "number", @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.Freight)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipCountry)</td>
-        <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipCity)</td>
-        <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipRegion)</td>
-        <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
-        <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { @class = "form-control" })</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipAddress)</td>
-        <td>@Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td>@Html.LabelFor(model => model.CustomerID)</td>
+            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.EmployeeID)</td>
+            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderDate)</td>
+            <td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.RequiredDate)</td>
+            <td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperDate)</td>
+            <td>@Html.TextBoxFor(model => model.ShipperDate, new { @type = "date", @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperID)</td>
+            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperlist, "請選擇...")</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipperID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipName)</td>
+            <td>@Html.TextBoxFor(model => model.ShipName, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipName)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.Freight)</td>
+            <td>@Html.TextBoxFor(model => model.Freight, new { type = "number", @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Freight)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCountry)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCity)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipRegion)</td>
+            <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
+            <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipAddress)</td>
+            <td>@Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
+        </tr>
+    </table>
     <input type="submit" value="存檔" />
     <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回上一頁</button>
     <h3>訂單明細:</h3>
@@ -84,67 +84,99 @@
         </tr>
     </table>
 }
-    <button onclick="InsertProduct()" id="InsertProduct">新增商品</button>
-    <script type="text/javascript">
-        function InsertProduct() {
-            $.ajax({
-                type : "Get",
-                url : "/SelectOrder/InsertProduct",
-                datatype : "json",
-                success: function (response) {
-                    var id = $("#detailtable").find("tr").length-1
-                    row = "<tr id='row_"+id+"'><td><select id = 'OrderDetail[" + id + "].ProductID' name = 'OrderDetail[" + id + "].ProductID' onchange = 'GetPrice("+id+")'>"
-                    for (var i=0;i<response.length;i++){
-                        row += "<option value = " + response[i].Value + ">" + response[i].Text + "</option>"
-                    }
-                    row += "</select></td>"
-                    row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' onchange= GetTotal(" + id +") ></td> " +
-                        "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' onchange= GetTotal("+id+") ></td> " +
-                        "<td> <input type='text' id='Sum" + id + "' name = 'Sum" + id + "' </td>"+
-                        "<td><input type = 'button' onclick = 'DelRow("+id+")' value = '刪除'></td></tr> "
-                        
-                    $("#detailtable").append(row);
-                },              
-                error: function (error) {
-                    alert("新增欄位失敗");
+<button onclick="InsertProduct()" id="InsertProduct">新增商品</button>
+<script type="text/javascript">
+    function InsertProduct() {
+        $.ajax({
+            type : "Get",
+            url : "/SelectOrder/InsertProduct",
+            datatype : "json",
+            success: function (response) {
+                var id = $("#detailtable").find("tr").length-1
+                row = "<tr id='row_"+id+"'><td><select id = 'OrderDetail[" + id + "].ProductID' name = 'OrderDetail[" + id + "].ProductID' onchange = 'GetPrice("+id+")'>"
+                for (var i=0;i<response.length;i++){
+                    row += "<option value = " + response[i].Value + ">" + response[i].Text + "</option>"
                 }
-            });
-        };
-        
-        function GetPrice(id) {
-            var key = $("select[id = 'OrderDetail[" + id + "].ProductID']").val();
+                row += "</select></td>"
+                row += "<td> <input type='text' id='OrderDetail[" + id + "].UnitPrice' name = 'OrderDetail[" + id + "].UnitPrice' value=0 onchange= GetTotal(" + id +") ></td> " +
+                    "<td> <input type='text' id='OrderDetail[" + id + "].Qty' name = 'OrderDetail[" + id + "].Qty' value=0 onchange= GetTotal("+id+") ></td> " +
+                    "<td> <input type='text' id='Sum" + id + "' name = 'Sum" + id + "' </td>"+
+                    "<td><input type = 'button' onclick = 'DelRow("+id+")' value = '刪除'></td></tr> "
 
-            $.ajax({
-                type : "Get",
-                url : "/SelectOrder/GetPrice?arg=" + key ,
-                datatype : "json",
-                success: function (response) {
-                    $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val(response);
-                },
-                error: function (error) {
-                    console.log("error");
-                }
-            });
-        };
-        function GetTotal(id) {
-            var money = Math.round($("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val());
-            $("#Sum" + id).val(money);                  
-        };
-        function DelRow(id) {
-            $('#row_' + id).hide();            
-            $("select[id = 'OrderDetail[" + id + "].ProductID']").val(null);
-        
-        };
-        function CheckForm() {
-            var form = true;
-            tr = $("#detailtable").find("tr").length;
-            if (tr == 1) {
-                form = false;
-                alert("請新增商品明細");
-                return form;
+                $("#detailtable").append(row);
+            },
+            error: function (error) {
+                alert("新增欄位失敗");
             }
-        };
-        
+        });
+    };
 
-    </script>
+    function GetPrice(id) {
+        var key = $("select[id = 'OrderDetail[" + id + "].ProductID']").val();
+
+        $.ajax({
+            type : "Get",
+            url : "/SelectOrder/GetPrice?arg=" + key ,
+            datatype : "json",
+            success: function (response) {
+                $("input[id = 'OrderDetail[" + id + "].UnitPrice']").val(response);
+            },
+            error: function (error) {
+                console.log("error");
+            }
+        });
+    };
+    function GetTotal(id) {
+        var money = Math.round($("input[id = 'OrderDetail[" + id + "].UnitPrice']").val() * $("input[id = 'OrderDetail[" + id + "].Qty']").val());
+        $("#Sum" + id).val(money);
+    };
+    function DelRow(id) {
+        $('#row_' + id).hide();
+        $("select[id = 'OrderDetail[" + id + "].ProductID']").val(0);
+
+    };
+    function CheckForm() {
+        var form = true;
+        tr = $("#detailtable").find("tr").length;
+        if (tr == 1) {
+            form = false;
+            alert("請新增商品明細");
+            return form;
+        }
+        var temp = new Array();      
+        for(var i=0;i<(tr-1);i++){       
+            if($("select[id = 'OrderDetail[" + i + "].ProductID']").val() == null || $("select[id = 'OrderDetail[" + i + "].ProductID']").val() == 0){
+                
+            }else{
+                var name = $("select[id = 'OrderDetail[" + i + "].ProductID']").val();
+                temp.push(name);   
+                var P=$("select[id = 'OrderDetail[" + i + "].UnitPrice']").val();
+                var Q=$("select[id = 'OrderDetail[" + i + "].Qty']").val();
+                if(P == 0 || Q == 0 ){
+                    form = false;
+                    alert("價格或數量未輸入");
+                    return form;
+                }
+            }                    
+        }    
+        debugger
+        var a =0;
+        for(var j=0;j<temp.length;j++){
+            for(var k=1;k<temp.length;k++){
+                if(temp[k-1] == temp[k]){
+                    a++;
+                }
+            }
+        }        
+        if(a>0){
+            form = false;
+            alert("商品重複");            
+            return form;
+        }
+
+
+    };
+
+
+</script>
 
