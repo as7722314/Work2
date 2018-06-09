@@ -60,6 +60,9 @@
         $("#EmployeeID").kendoDropDownList();
         $("#ShipperID").kendoDropDownList();
         $("#OrderID").kendoNumericTextBox();
+        $("#reset").on('click', function () {
+            document.getElementById("index_form").reset();
+        });
         $("#search").on('click', function () {
 
             var dataSrc = new kendo.data.DataSource({
@@ -74,7 +77,8 @@
                             },
                         dataType: "json"
                     }
-                },
+                },                
+                
                 pageSize: 20,
                 serverPaging: true,
                 serverSorting: true
@@ -82,27 +86,30 @@
 
             $("#grid").kendoGrid({
                 dataSource: dataSrc,
-                columns: [
-                    { field: "OrderID", title: "OrderID" },
-                    { field: "CompanyName", title: "CompanyName" },
-                    { field: "OrderDate", title: "OrderDate", template: '#= kendo.toString(OrderDate,"yyyy/MM/dd") #', format: "yyyy-MM-dd"},
-                    { field: "ShipperDate", title: "ShipperDate", format: "yyyy-MM-dd",template: "# if (ShipperDate == null) { ## } else { #" +
-                            "#= kendo.toString(ShipperDate,'yyyy/MM/dd') #" +
-                        "# } #"
-                    },
-                    { template: "<a class='k-button' href='/SelectOrder/Update?orderid=" + '#= kendo.toString(OrderID) #' + " ' >修改  <span class='k-icon k-i-track-changes-enable'></span>  </a>" +
-                        "<a class='k-button' href='/SelectOrder/Del?orderid=" + '#= kendo.toString(OrderID) #' + " ' >刪除 <span class='k-icon k-i-delete'></span></a>"
-                    }
-                ],
+                
+                
                 
                 editable: true,
                 editable: "inline",
                 height: 500,
                 scrollable: true,
                 sortable: true,
-                selectable: true,                
+                selectable: true,
                 filterable: true,
                 pageable: true,
+
+                columns: [
+                    { field: "OrderID", title: "OrderID" },
+                    { field: "CompanyName", title: "CompanyName" },
+                    { field: "OrderDate", title: "OrderDate", template: '#= kendo.toString(kendo.parseDate(OrderDate,"yyyy-MM-dd"),"yyyy/MM/dd") #'},
+                    { field: "ShipperDate", title: "ShipperDate", template: "# if (ShipperDate == null) { ## } else { #" +
+                        "#= kendo.toString(kendo.parseDate(OrderDate,'yyyy-MM-dd'),'yyyy/MM/dd') #" +
+                        "# } #"
+                    },
+                    { template: "<a class='k-button' href='/SelectOrder/Update?orderid=" + '#= kendo.toString(OrderID) #' + " ' >修改  <span class='k-icon k-i-track-changes-enable'></span>  </a>" +
+                        "<a class='k-button' href='/SelectOrder/Del?orderid=" + '#= kendo.toString(OrderID) #' + " ' >刪除 <span class='k-icon k-i-delete'></span></a>"
+                    }
+                ],
             });
         });
     });

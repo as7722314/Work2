@@ -85,7 +85,10 @@
     </table>
     </div>
 
-<button onclick="InsertProduct()" id="InsertProduct">新增商品</button>
+<a class='k-button' id="InsertProduct">
+    新增商品
+    <span class='k-icon k-i-search'></span>
+</a>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#CustomerID").kendoDropDownList();
@@ -95,7 +98,11 @@
         $("#RequiredDate").kendoDatePicker();
         $("#ShipperDate").kendoDatePicker();
         $("#detailtable").kendoGrid();
-        
+        $("#InsertProduct").on('click', function () {
+            
+
+
+        });
         
         
     });
