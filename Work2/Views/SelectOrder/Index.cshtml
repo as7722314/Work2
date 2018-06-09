@@ -3,17 +3,15 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@using (Html.BeginForm("SelectList", "SelectOrder", FormMethod.Post))
-{
+<form id="index_form">
     <table>
         <tr>
             <td>@Html.LabelFor(model => model.OrderID)</td>
-            <td>@Html.TextBoxFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control" } })</td>
+            <td>@Html.TextBoxFor(model => model.OrderID, new { htmlAttributes = new { @class = "k-textbox " } })</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.CompanyName)</td>
-            <td>@Html.TextBoxFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })</td>
+            <td>@Html.TextBoxFor(model => model.CompanyName, new { htmlAttributes = new { @class = "k-textbox " } })</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.EmployeeID)</td>
@@ -25,18 +23,87 @@
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.OrderDate)</td>
-            <td>@Html.TextBoxFor(model => model.OrderDate, new { type = "date", @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.OrderDate, new { type = "date", @class = "form-control aa " })</td>
         </tr>
         <tr>
+
             <td>@Html.LabelFor(model => model.RequiredDate)</td>
-            <td>@Html.TextBoxFor(model => model.RequiredDate, new { type = "date", @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.RequiredDate, new { type = "date", @class = "form-control " })</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipperDate)</td>
-            <td>@Html.TextBoxFor(model => model.ShipperDate, new { type = "date", @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.ShipperDate, new { type = "date", @class = "form-control " })</td>
         </tr>
     </table>
-    <input type="submit" value="查詢" />
-    <input type="reset" value="清除" />
-    <button onclick="location.href='@Url.Action("InsertOrder", "SelectOrder")';return false;">新增訂單</button>
-}
+</form>
+<a class='k-button' id="search">
+    查詢
+    <span class='k-icon k-i-search'></span>
+</a>
+<a class='k-button' id="reset">
+    清除
+    <span class='k-icon k-i-reload'></span>
+</a>
+<a class='k-button' id="insert" href="/SelectOrder/InsertOrder">
+    新增訂單
+    <span class='k-icon k-i-pencil'></span>
+</a>
+
+
+<div id="grid"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#OrderDate").kendoDatePicker();
+        $("#RequiredDate").kendoDatePicker();
+        $("#ShipperDate").kendoDatePicker();
+        $("#EmployeeID").kendoDropDownList();
+        $("#ShipperID").kendoDropDownList();
+        $("#OrderID").kendoNumericTextBox();
+        $("#search").on('click', function () {
+
+            var dataSrc = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        type: "POST",
+                        url: "/SelectOrder/SelectList",
+                        data:
+                            {
+                                'OrderID': $(OrderID).val(), 'CompanyName': $(CompanyName).val(), 'EmployeeID': $(EmployeeID).val(), 'ShipperID': $(ShipperID).val(),
+                                'OrderDate': $(OrderDate).val(), 'RequiredDate': $(RequiredDate).val(), 'ShipperDate': $(ShipperDate).val()
+                            },
+                        dataType: "json"
+                    }
+                },
+                pageSize: 20,
+                serverPaging: true,
+                serverSorting: true
+            });
+
+            $("#grid").kendoGrid({
+                dataSource: dataSrc,
+                columns: [
+                    { field: "OrderID", title: "OrderID" },
+                    { field: "CompanyName", title: "CompanyName" },
+                    { field: "OrderDate", title: "OrderDate", template: '#= kendo.toString(OrderDate,"yyyy/MM/dd") #', format: "yyyy-MM-dd"},
+                    { field: "ShipperDate", title: "ShipperDate", format: "yyyy-MM-dd",template: "# if (ShipperDate == null) { ## } else { #" +
+                            "#= kendo.toString(ShipperDate,'yyyy/MM/dd') #" +
+                        "# } #"
+                    },
+                    { template: "<a class='k-button' href='/SelectOrder/Update?orderid=" + '#= kendo.toString(OrderID) #' + " ' >修改  <span class='k-icon k-i-track-changes-enable'></span>  </a>" +
+                        "<a class='k-button' href='/SelectOrder/Del?orderid=" + '#= kendo.toString(OrderID) #' + " ' >刪除 <span class='k-icon k-i-delete'></span></a>"
+                    }
+                ],
+                
+                editable: true,
+                editable: "inline",
+                height: 500,
+                scrollable: true,
+                sortable: true,
+                selectable: true,                
+                filterable: true,
+                pageable: true,
+            });
+        });
+    });
+</script>

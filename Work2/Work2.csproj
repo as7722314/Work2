@@ -90,16 +90,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Start\Content\bootstrap.css" />
-    <Content Include="App_Start\Content\bootstrap.min.css" />
-    <Content Include="App_Start\Content\Site.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Default\editor.png" />
+    <Content Include="Content\Default\imagebrowser.png" />
+    <Content Include="Content\Default\indeterminate.gif" />
+    <Content Include="Content\Default\loading-image.gif" />
+    <Content Include="Content\Default\loading.gif" />
+    <Content Include="Content\Default\loading_2x.gif" />
+    <Content Include="Content\Default\markers.png" />
+    <Content Include="Content\Default\markers_2x.png" />
+    <Content Include="Content\Default\slider-h.gif" />
+    <Content Include="Content\Default\slider-v.gif" />
+    <Content Include="Content\Default\sprite.png" />
+    <Content Include="Content\Default\sprite_2x.png" />
+    <Content Include="Content\Default\sprite_kpi.png" />
+    <Content Include="Content\Default\sprite_kpi_2x.png" />
+    <Content Include="Content\fonts\glyphs\KendoUIGlyphs.svg" />
+    <Content Include="Content\fonts\glyphs\WebComponentsIcons.svg" />
+    <Content Include="Content\kendo.common.min.css" />
+    <Content Include="Content\kendo.default.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\fonts\glyphs\KendoUIGlyphs.eot" />
+    <Content Include="Content\fonts\glyphs\KendoUIGlyphs.ttf" />
+    <Content Include="Content\fonts\glyphs\KendoUIGlyphs.woff" />
+    <Content Include="Content\fonts\glyphs\WebComponentsIcons.eot" />
+    <Content Include="Content\fonts\glyphs\WebComponentsIcons.ttf" />
+    <Content Include="Content\fonts\glyphs\WebComponentsIcons.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\cultures\kendo.culture.en-US.min.js" />
+    <Content Include="Scripts\cultures\kendo.culture.zh-TW.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\kendo.all.min.js" />
+    <Content Include="Scripts\messages\kendo.messages.en-US.min.js" />
+    <Content Include="Scripts\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>

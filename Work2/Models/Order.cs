@@ -109,6 +109,6 @@ namespace Work2.Models
         [Required]
         [DisplayName("發貨國家")]
         public string ShipCountry { get; set; }
-        
+        public string Value { get; internal set; }
     }
 }

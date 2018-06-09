@@ -1,6 +1,6 @@
 ﻿
 @{
-    
+
     ViewBag.Title = "SelectList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -11,8 +11,7 @@
         <th>訂單編號</th>
         <th>客戶名稱</th>
         <th>訂購日期</th>
-        <th>出貨日期</th>
-        <th>運費</th>
+        <th>出貨日期</th>        
         <th></th>
         <th></th>
     </tr>
@@ -29,12 +28,14 @@
                 @ViewBag.Orderdata.Rows[i][2].ToString("yyyy/MM/dd")
             </td>
             <td>
-                @try{
+                @try
+                {
                     @ViewBag.Orderdata.Rows[i][3].ToString("yyyy/MM/dd")
                 }
-                catch{ 
+                catch
+                {
                     @ViewBag.Orderdata.Rows[i][3]
-                }                
+                }
             </td>
             <td>
                 @Html.ActionLink("修改", "Update", new { controller = "SelectOrder", orderID = @ViewBag.Orderdata.Rows[i][0] })
@@ -43,6 +44,8 @@
                 @Html.ActionLink("刪除", "Del", new { controller = "SelectOrder", orderID = @ViewBag.Orderdata.Rows[i][0] })
             </td>
         </tr>
-    }    
+    }
 </table>
 <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回查詢頁</button>
+
+

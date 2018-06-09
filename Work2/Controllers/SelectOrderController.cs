@@ -22,11 +22,12 @@ namespace Work2.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SelectList(Index arg)
+        public JsonResult SelectList(Index arg)
         {   ///取得訂單資料
             OrderService orderService = new OrderService();
-            ViewBag.Orderdata = orderService.GetOrderCondition(arg);
-            return View();
+            ///return this.Json(orderService.GetOrderCondition(arg));          
+            return Json(orderService.GetOrderCondition(arg), JsonRequestBehavior.AllowGet);
+
         }
         [HttpGet]
         public ActionResult Del(int orderid)

@@ -5,8 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("InsertOrder", "SelectOrder", FormMethod.Post, new { onsubmit = "return CheckForm()" }))
-{
+
     <table>
         <tr>
             <td>@Html.LabelFor(model => model.CustomerID)</td>
@@ -39,7 +38,7 @@
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipName)</td>
-            <td>@Html.TextBoxFor(model => model.ShipName, new { @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.ShipName, new { @class = "k-textbox" })</td>
             <td>@Html.ValidationMessageFor(m => m.ShipName)</td>
         </tr>
         <tr>
@@ -49,17 +48,17 @@
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipCountry)</td>
-            <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "k-textbox" })</td>
             <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipCity)</td>
-            <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "k-textbox" })</td>
             <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipRegion)</td>
-            <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
+            <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "k-textbox" })</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
@@ -74,6 +73,7 @@
     <input type="submit" value="存檔" />
     <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回上一頁</button>
     <h3>訂單明細:</h3>
+    <div data-role="detailgrid">
     <table id="detailtable" border="1">
         <tr>
             <th>商品</th>
@@ -83,9 +83,22 @@
             <th>動作</th>
         </tr>
     </table>
-}
+    </div>
+
 <button onclick="InsertProduct()" id="InsertProduct">新增商品</button>
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("#CustomerID").kendoDropDownList();
+        $("#EmployeeID").kendoDropDownList();
+        $("#ShipperID").kendoDropDownList();
+        $("#OrderDate").kendoDatePicker();
+        $("#RequiredDate").kendoDatePicker();
+        $("#ShipperDate").kendoDatePicker();
+        $("#detailtable").kendoGrid();
+        
+        
+        
+    });
     function InsertProduct() {
         $.ajax({
             type : "Get",
@@ -104,6 +117,7 @@
                     "<td><input type = 'button' onclick = 'DelRow("+id+")' value = '刪除'></td></tr> "
 
                 $("#detailtable").append(row);
+                
             },
             error: function (error) {
                 alert("新增欄位失敗");

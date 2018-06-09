@@ -270,7 +270,7 @@ namespace Work2.Models.Services
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public DataTable GetOrderCondition(Index arg)
+        public List<Index> GetOrderCondition(Index arg)
         {
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
@@ -306,7 +306,7 @@ namespace Work2.Models.Services
             }
             if (arg.ShipperDate.HasValue)
             {
-                sql += " and ShipperedDate = @ShipperDate";
+                sql += " and ShippedDate = @ShipperDate";
             }
             SqlCommand command = new SqlCommand(sql, conn);
 
@@ -346,7 +346,19 @@ namespace Work2.Models.Services
             DataSet ds = new DataSet();
             dataAdapter.Fill(ds);
             DataTable dataTable = ds.Tables[0]; ///***
-            return dataTable;
+            List<Index> orderdata = new List<Index>();
+            foreach(DataRow dr in dataTable.Rows)
+            {
+                orderdata.Add(new Index()
+                {
+                    OrderID = Convert.ToInt32(dr["OrderID"]),
+                    CompanyName = Convert.ToString(dr["CompanyName"]),
+                    OrderDate = Convert.ToDateTime(dr["OrderDate"]),                    
+                    ShipperDate = (!String.IsNullOrWhiteSpace(dr["ShippedDate"].ToString())) ? new DateTime? (Convert.ToDateTime(dr["ShippedDate"])) : null
+                    
+                });
+            }            
+            return orderdata;
         }
         /// <summary>
         /// 取得產品ID與名稱
@@ -362,6 +374,7 @@ namespace Work2.Models.Services
             dataAdapter.Fill(ds);
             DataTable dataTable = ds.Tables[0];
             List<SelectListItem> orderDetailList = new List<SelectListItem>();
+
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 orderDetailList.Add(new SelectListItem()
