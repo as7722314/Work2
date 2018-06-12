@@ -76,7 +76,7 @@
 <h3>訂單明細:</h3>
 
 <div id="detailgrid">
-    
+
 </div>
 
 
@@ -90,47 +90,78 @@
         $("#ShipperDate").kendoDatePicker();
 
 
-        var dataSrc = new kendo.data.DataSource({            
+        var dataSrc = new kendo.data.DataSource({
             schema: {
                 model: {
                     fields: {
-                        ProductID: { type: "int" },
-                        ProductName: { type: "string" },
+                        ProductName: { defaultValue: { 'Value': "", 'Text': "請選擇" } },
+                        UnitPrice: { type: "number", editable: false },
+                        Qty: { type: "number" },
+                        Total: { type: "number", editable: false },
                     }
                 }
             },
-        });        
+            pageSize: 10,
+        });
 
         $("#detailgrid").kendoGrid({
             dataSource: dataSrc,
             pageable: true,
-            
+
             toolbar: ["create"],
             columns: [
-                { field: "ProductName", title: "ProductName", width: "180px", editor: categoryDropDownEditor, template: "#=ProductName#" },                
-                { field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: "130px" },
-                { command: "destroy", title: " ", width: "150px" }],
+                { field: "ProductName", title: "ProductName", width: "180px", editor: categoryDropDownEditor, template: "#=ProductName.Text#" },
+                { field: "UnitPrice", title: "UnitPrice", format: "{0:c}", width: "100px" },
+                { field: "Qty", title: "Qty", format: "{0:c}", width: "100px" },
+                { field: "Total", title: "Total", format: "{0:c}", width: "100px" },
+                { command: "destroy", title: " ", width: "100px" }],
             editable: true
         });
 
+
         function categoryDropDownEditor(container, options) {
-            $('<input required name="' + options.field + '"/>')
-                .appendTo(container)
-                .kendoDropDownList({
-                    autoBind: false,
-                    dataTextField: "Text",
-                    dataValueField: "Value",
-                    dataSource: {                        
-                        transport: {
-                            read: {
-                                type: "GET",
-                                url: "/SelectOrder/InsertProduct",
-                                dataType: "json"
-                            }
+            $('<input required name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+                autoBind: false,
+                dataTextField: "Text",
+                dataValueField: "Value",
+                select: onSelect,
+                dataSource: {
+                    transport: {
+                        read: {
+                            type: "GET",
+                            url: "/SelectOrder/InsertProduct",
+                            dataType: "json"
                         }
                     }
-                });
+                }
+            });
         }
+        function onSelect(e) {
+            var dataItem = this.dataItem(e.item).Value;
+            console.log(dataItem);
+            var a = dataItem.Value;
+
+            $.ajax({
+                url: '/SelectOrder/GetPrice',
+                type: "POST",
+                dataType: 'json',
+                data:
+                    {
+                        'ProductID': a
+                    },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            })
+
+        
+
+        };
+
+
     });
 
 
