@@ -78,17 +78,21 @@
                         dataType: "json"
                     }
                 },                
-                
-                pageSize: 20,
-                serverPaging: true,
-                serverSorting: true
+                schema: {
+                    model: {
+                        fields: {
+                            OrderID: { type: "int" },
+                            CompanyName: { type: "string" },
+                            OrderDate: { type: "date" },
+                            ShipperDate: { type: "date" },
+                        }
+                    }
+                },
+                pageSize: 10,                
             });
-
+            
             $("#grid").kendoGrid({
                 dataSource: dataSrc,
-                
-                
-                
                 editable: true,
                 editable: "inline",
                 height: 500,
@@ -97,13 +101,13 @@
                 selectable: true,
                 filterable: true,
                 pageable: true,
-
+                
                 columns: [
                     { field: "OrderID", title: "OrderID" },
                     { field: "CompanyName", title: "CompanyName" },
                     { field: "OrderDate", title: "OrderDate", template: '#= kendo.toString(kendo.parseDate(OrderDate,"yyyy-MM-dd"),"yyyy/MM/dd") #'},
                     { field: "ShipperDate", title: "ShipperDate", template: "# if (ShipperDate == null) { ## } else { #" +
-                        "#= kendo.toString(kendo.parseDate(OrderDate,'yyyy-MM-dd'),'yyyy/MM/dd') #" +
+                        "#= kendo.toString(kendo.parseDate(ShipperDate,'yyyy-MM-dd'),'yyyy/MM/dd') #" +
                         "# } #"
                     },
                     { template: "<a class='k-button' href='/SelectOrder/Update?orderid=" + '#= kendo.toString(OrderID) #' + " ' >修改  <span class='k-icon k-i-track-changes-enable'></span>  </a>" +
