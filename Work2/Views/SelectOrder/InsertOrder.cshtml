@@ -101,6 +101,10 @@
                     }
                 }
             },
+            aggregate:
+                [
+                    { field: "Total", aggregate: "Sum" }
+                ],
             change: GetPrice,
             pageSize: 10,
         });
@@ -112,9 +116,9 @@
             toolbar: ["create"],
             columns: [
                 { field: "ProductID", title: "商品", width: "180px", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
-                { field: "UnitPrice", title: "單價", format: "{0:c}", width: "100px" },
-                { field: "Qty", title: "數量", format: "{0:c}", width: "100px" },
-                { field: "Total", title: "小計", format: "{0:c}", width: "100px" },
+                { field: "UnitPrice", title: "單價", width: "100px" },
+                { field: "Qty", title: "數量", width: "100px" },
+                { field: "Total", title: "小計", width: "100px", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(data.Total.Sum,'C0')#" },
                 { command: "destroy", title: " ", width: "100px" }],
             editable: true
         });
@@ -137,9 +141,21 @@
             });
         }
         function GetPrice(e) {
-            //var id = e.items[0].ProductID.Value;
-            if (e.field == "ProductID") {
-                console.log(e.field);
+            //console.log(e.action);
+            //var id = e.items[0].ProductID.Value;         
+            if (e.action == 'add') {
+                
+                var model = e.items[0];
+                var temp;
+                temp = e.items[0].UnitPrice * e.items[0].Qty;
+                model.Total = temp;
+                
+                //$("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
+                $("#detailgrid").data('kendoGrid').refresh();
+                dataSrc.sync();
+            }                  
+            else if (e.field == "ProductID") {                
+                
                 var model = e.items[0];
                 var temp;
                 $.ajax({
@@ -154,7 +170,7 @@
                             model.Total = temp * e.items[0].Count;
 
                             $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
-                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
+                            //$("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
                             $("#detailgrid").data('kendoGrid').refresh();
                             dataSrc.sync();
                         }
@@ -164,7 +180,7 @@
                     }
                 });
             } else if (e.field == "Qty") {
-                console.log(e.field);
+                
                 var model = e.items[0];
                 var temp;
                 if (temp !== model.Total) {
@@ -175,6 +191,7 @@
                     dataSrc.sync();
                 }
             }
+            
 
 
 
