@@ -94,13 +94,14 @@
             schema: {
                 model: {
                     fields: {
-                        ProductName: { defaultValue: { 'Value': "", 'Text': "請選擇" } },
+                        ProductID: { defaultValue: { 'Value': "", 'Text': "請選擇" } },
                         UnitPrice: { type: "number", editable: false },
                         Qty: { type: "number" },
                         Total: { type: "number", editable: false },
                     }
                 }
             },
+            change: GetPrice,
             pageSize: 10,
         });
 
@@ -110,10 +111,10 @@
 
             toolbar: ["create"],
             columns: [
-                { field: "ProductName", title: "ProductName", width: "180px", editor: categoryDropDownEditor, template: "#=ProductName.Text#" },
-                { field: "UnitPrice", title: "UnitPrice", format: "{0:c}", width: "100px" },
-                { field: "Qty", title: "Qty", format: "{0:c}", width: "100px" },
-                { field: "Total", title: "Total", format: "{0:c}", width: "100px" },
+                { field: "ProductID", title: "商品", width: "180px", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
+                { field: "UnitPrice", title: "單價", format: "{0:c}", width: "100px" },
+                { field: "Qty", title: "數量", format: "{0:c}", width: "100px" },
+                { field: "Total", title: "小計", format: "{0:c}", width: "100px" },
                 { command: "destroy", title: " ", width: "100px" }],
             editable: true
         });
@@ -124,7 +125,6 @@
                 autoBind: false,
                 dataTextField: "Text",
                 dataValueField: "Value",
-                select: onSelect,
                 dataSource: {
                     transport: {
                         read: {
@@ -136,30 +136,44 @@
                 }
             });
         }
-        function onSelect(e) {
-            var dataItem = this.dataItem(e.item).Value;
-            console.log(dataItem);
-            var a = dataItem.Value;
+        function GetPrice(e) {
+            //var id = e.items[0].ProductID.Value;
+           
+            if (e.field == "ProductID") {
+                var model = e.items[0];
+                var currentValue;
+                $.ajax({
+                    type: "POST",
+                    data: { 'arg': e.items[0].ProductID.Value },
+                    dataType: 'json',
+                    url: '/SelectOrder/GetPrice',
+                    success: function (response) {
+                        currentValue = response;
+                        model.UnitPrice = currentValue
+                        model.Total = response * e.items[0].Count;
+                        console.log(model.Total);
+                        $("#insert_detail_grid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(currentValue);
+                        //$("#insert_detail_grid").data('kendoGrid').refresh();
+                        //dataSource.sync();
+                        /*
+                        var grid = $("#detailgrid").data("kendoGrid");
+                        grid.select("tr:eq(0), tr:eq(1)");
+                        */
+                        
 
-            $.ajax({
-                url: '/SelectOrder/GetPrice',
-                type: "POST",
-                dataType: 'json',
-                data:
-                    {
-                        'ProductID': a
                     },
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (result) {
-                    console.log(result);
-                }
-            })
+                    error: function (result) {
+                        console.log(result);
+                    }
+                })
+            }
 
-        
 
-        };
+
+
+
+
+        }
 
 
     });
