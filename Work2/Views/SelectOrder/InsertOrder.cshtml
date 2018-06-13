@@ -138,35 +138,44 @@
         }
         function GetPrice(e) {
             //var id = e.items[0].ProductID.Value;
-           
             if (e.field == "ProductID") {
+                console.log(e.field);
                 var model = e.items[0];
-                var currentValue;
+                var temp;
                 $.ajax({
                     type: "POST",
                     data: { 'arg': e.items[0].ProductID.Value },
                     dataType: 'json',
                     url: '/SelectOrder/GetPrice',
                     success: function (response) {
-                        currentValue = response;
-                        model.UnitPrice = currentValue
-                        model.Total = response * e.items[0].Count;
-                        console.log(model.Total);
-                        $("#insert_detail_grid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(currentValue);
-                        //$("#insert_detail_grid").data('kendoGrid').refresh();
-                        //dataSource.sync();
-                        /*
-                        var grid = $("#detailgrid").data("kendoGrid");
-                        grid.select("tr:eq(0), tr:eq(1)");
-                        */
-                        
+                        temp = response;
+                        if (temp !== model.UnitPrice) {
+                            model.UnitPrice = temp
+                            model.Total = temp * e.items[0].Count;
 
+                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
+                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
+                            $("#detailgrid").data('kendoGrid').refresh();
+                            dataSrc.sync();
+                        }
                     },
                     error: function (result) {
-                        console.log(result);
+                        console.log("失敗");
                     }
-                })
+                });
+            } else if (e.field == "Qty") {
+                console.log(e.field);
+                var model = e.items[0];
+                var temp;
+                if (temp !== model.Total) {
+                    temp = Math.round(e.items[0].UnitPrice * e.items[0].Qty);
+                    model.Total = temp;
+                    $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
+                    $("#detailgrid").data('kendoGrid').refresh();
+                    dataSrc.sync();
+                }
             }
+
 
 
 
