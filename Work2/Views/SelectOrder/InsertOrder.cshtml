@@ -86,7 +86,19 @@
             schema: {
                 model: {
                     fields: {
-                        ProductID: { defaultValue: { 'Value': "", 'Text': "請選擇" } },
+                        ProductID: {
+                            defaultValue: { 'Value': 58, 'Text': "Product ACRVI" },
+                            validation: {
+                                required: true,
+                                ProductIDvalidation: function (input) {
+                                    if (input.is("[name='ProductID']") && input.val() != "") {
+                                        console.log($("[name='ProductID']").val());
+                                        console.log(input.val());
+                                    }
+                                    return true                                    
+                                }
+                            }
+                        },
                         UnitPrice: { type: "number", editable: false },
                         Qty: { type: "number" },
                         Total: { type: "number", editable: false },
@@ -107,11 +119,11 @@
 
             toolbar: ["create"],
             columns: [
-                { field: "ProductID", title: "商品", width: "180px", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
-                { field: "UnitPrice", title: "單價", width: "100px" },
-                { field: "Qty", title: "數量", width: "100px" },
-                { field: "Total", title: "小計", width: "100px", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
-                { command: "destroy", title: " ", width: "100px" }],
+                { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
+                { field: "UnitPrice", title: "單價" },
+                { field: "Qty", title: "數量"},
+                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
+                { command: "destroy", title: " "}],
             editable: true
         });
         function categoryDropDownEditor(container, options) {
@@ -180,7 +192,6 @@
             }
         }
         
-
         $(".dateValidator").kendoValidator({
             rules: {
                 customRule1: function (input) {
@@ -193,18 +204,28 @@
                 },
                 customRule2: function (input) {
                     if (input.is("[name='ShipperDate']")) {
-                        var RequiredDate = kendo.parseDate($("[name='ShipperDate']").val());                        
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());                        
                         var OrderDate = kendo.parseDate($("[name='OrderDate']").val());                        
-                        return OrderDate.getTime() < RequiredDate.getTime();
+                        return OrderDate.getTime() < ShipperDate.getTime();
                     }
                     return true; 
+                },   
+                customRule3: function (input) {
+                    if (input.is("[name='OrderDate']")) {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val()); 
+                        return OrderDate.getTime() < RequiredDate.getTime() || OrderDate.getTime() < ShipperDate.getTime();
+                    }
+                    return true;
                 }               
 
             },
 
             messages: {
                 customRule1: "訂單日期必須小於需要日期",
-                customRule2: "訂單日期必須小於發貨日期"
+                customRule2: "訂單日期必須小於發貨日期",
+                customRule3: "訂單日期必須小於需要或發貨日期",
             }
 
         });
