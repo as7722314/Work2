@@ -9,12 +9,12 @@
     <table>
         <tr>
             <td>@Html.LabelFor(model => model.CustomerID)</td>
-            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...", new { @class = "dropdownlist ", required = "required" })</td>
+            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, "請選擇...", new { @class = "dropdownlist", required = "required" })</td>
             <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.EmployeeID)</td>
-            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...", new { @class = "dropdownlist ", required = "required" })</td>
+            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...", new { @class = "dropdownlist", required = "required" })</td>
             <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
         </tr>
         <tr>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td>@Html.LabelFor(model => model.ShipperID)</td>
-            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperlist, "請選擇...", new { @class = "dropdownlist ", required = "required" })</td>
+            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperlist, "請選擇...", new { @class = "dropdownlist", required = "required" })</td>
             <td>@Html.ValidationMessageFor(m => m.ShipperID)</td>
         </tr>
         <tr>
@@ -70,7 +70,9 @@
             <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
         </tr>
     </table>
-    <input type="submit" value="存檔" />
+    <a class="k-button" id="insert">
+        <span class="k-icon k-i-save"></span> 存檔
+    </a>
     <button onclick="location.href='@Url.Action("Index", "SelectOrder")';return false;">回上一頁</button>
     <h3>訂單明細:</h3>
     <div id="detailgrid"></div>
@@ -78,9 +80,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#dropdownlist").kendoDropDownList();        
-        $(".dateValidator").kendoDatePicker();      
-        var validator = $("#divValidator").kendoValidator().data("kendoValidator");///基本驗證
+        $(".dropdownlist").kendoDropDownList();
+        $(".dateValidator").kendoDatePicker();
 
         var dataSrc = new kendo.data.DataSource({
             schema: {
@@ -90,18 +91,28 @@
                             defaultValue: { 'Value': 58, 'Text': "Product ACRVI" },
                             validation: {
                                 required: true,
-                                ProductIDvalidation: function (input) {
+                                productvalidation: function (input) {
+                                    input.attr("data-productvalidation-msg", "商品重複");
                                     if (input.is("[name='ProductID']") && input.val() != "") {
-                                        console.log($("[name='ProductID']").val());
-                                        console.log(input.val());
+                                        var displayedData = $("#detailgrid").data().kendoGrid.dataSource.view();
+                                        var checked = true;
+
+                                        $.each(displayedData, function (id, a) {
+                                            if (id != 0 && input.val() == a.ProductID.Value) {
+                                                checked = false;
+                                            }
+                                        });
+                                        return checked;
+                                        //console.log(displayedData[0].ProductID.Value);
                                     }
-                                    return true                                    
+                                    return true;
                                 }
+
                             }
                         },
-                        UnitPrice: { type: "number", editable: false },
-                        Qty: { type: "number" },
-                        Total: { type: "number", editable: false },
+                        UnitPrice: { type: "number", editable: false, defaultValue: 13.25 },
+                        Qty: { type: "number", validation: { required: true, min: 1 }, defaultValue: 1 },
+                        Total: { type: "number", editable: false, defaultValue: 13.25 },
                     }
                 }
             },
@@ -121,9 +132,9 @@
             columns: [
                 { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
                 { field: "UnitPrice", title: "單價" },
-                { field: "Qty", title: "數量"},
+                { field: "Qty", title: "數量" },
                 { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
-                { command: "destroy", title: " "}],
+                { command: "destroy", title: " " }],
             editable: true
         });
         function categoryDropDownEditor(container, options) {
@@ -191,34 +202,34 @@
                 }
             }
         }
-        
+
         $(".dateValidator").kendoValidator({
             rules: {
                 customRule1: function (input) {
-                    if (input.is("[name='RequiredDate']")) {
-                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());                        
-                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());                        
+                    if (input.is("[name='RequiredDate']") && $("[name='RequiredDate']").val() != " ") {
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < RequiredDate.getTime();
                     }
-                    return true; 
+                    return true;
                 },
                 customRule2: function (input) {
-                    if (input.is("[name='ShipperDate']")) {
-                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());                        
-                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());                        
+                    if (input.is("[name='ShipperDate']") && $("[name='ShipperDate']").val() != " ") {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < ShipperDate.getTime();
                     }
-                    return true; 
-                },   
+                    return true;
+                },
                 customRule3: function (input) {
-                    if (input.is("[name='OrderDate']")) {
+                    if (input.is("[name='OrderDate']") && $("[name='OrderDate']").val() != " ") {
                         var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
                         var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
-                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val()); 
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < RequiredDate.getTime() || OrderDate.getTime() < ShipperDate.getTime();
                     }
                     return true;
-                }               
+                }
 
             },
 
@@ -230,7 +241,53 @@
 
         });
 
+        var validator = $("#divValidator").kendoValidator().data("kendoValidator");///基本驗證
+        $("#insert").click(function () {
+            if (validator.validate()) {
+                var displayedData = $("#detailgrid").data().kendoGrid.dataSource.view();
+                var detaildata = [];
+                $.each(displayedData, function (id, a) {
+                    detaildata.push({
+                        'ProductID': a.ProductID.Value,
+                        'UnitPrice': a.UnitPrice,
+                        'Qty': a.Qty
+                    });
+                });
+                $.ajax({
+                    type: 'Post',
+                    url: '/SelectOrder/InsertOrder',
+                    data: {
+                        'OrderDetail': detaildata,
+                        'CustomerID': $('#CustomerID').val(),
+                        'EmployeeID': $('#EmployeeID').val(),
+                        'OrderDate': $('#OrderDate').val(),
+                        'RequiredDate': $('#RequiredDate').val(),
+                        'ShipperDate': $('#ShipperDate').val(),
+                        'ShipperID': $('#ShipperID').val(),
+                        'Freight': $('#Freight').val(),
+                        'ShipName': $('#ShipName').val(),
+                        'ShipAddress': $('#ShipAddress').val(),
+                        'ShipCity': $('#ShipCity').val(),
+                        'ShipRegion': $('#ShipRegion').val(),
+                        'ShipPostalCode': $('#ShipPostalCode').val(),
+                        'ShipCountry': $('#ShipCountry').val(),
+                    },
+                    datatype: 'json',
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    }, error: function (error) {
+
+                    }
+                });
+            }
+
+            /*
+            alert("功能未寫");
+            return false;
+            */
+        });
+
 
     });
 </script>
-

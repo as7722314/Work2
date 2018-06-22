@@ -49,25 +49,11 @@ namespace Work2.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult InsertOrder(Order arg)
-        {                      
-            if (ModelState.IsValid)///model驗證成功就執行
-            {
-                ModelState.Clear();
-                OrderService orderService = new OrderService();
-                orderService.InsertOrder(arg);
-                return RedirectToAction("Index", "SelectOrder");
-            }
-            else   ///驗證失敗就返回
-            {
-                EmployeeService employeeService = new EmployeeService();
-                ViewBag.employeelist = employeeService.GetEnameList();
-                ShipperService shipperService = new ShipperService();
-                ViewBag.shipperlist = shipperService.GetSnameList();
-                CustomerService customerservice = new CustomerService();
-                ViewBag.customerlist = customerservice.GetCustomerList();
-                return View();
-            }
+        public JsonResult InsertOrder(Order arg)
+        {
+            OrderService orderService = new OrderService();
+            string message = orderService.InsertOrder(arg);
+            return this.Json(message);
         }
         /// <summary>
         /// 更新資料頁

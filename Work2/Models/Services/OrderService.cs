@@ -59,8 +59,9 @@ namespace Work2.Models.Services
         /// 新增訂單
         /// </summary>
         /// <param name="order"></param>
-        public void InsertOrder(Order order)
+        public string InsertOrder(Order order)
         {
+            string message = "";
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             try
@@ -103,14 +104,14 @@ namespace Work2.Models.Services
                     command.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
                     command.Parameters.Add(new SqlParameter("@OrderDate", order.OrderDate));
                     command.Parameters.Add(new SqlParameter("@RequiredDate", order.RequiredDate));
-                    command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate.HasValue ? order.ShipperDate.Value.ToString("yyyy/MM/dd") : ""));                    
+                    command.Parameters.Add(new SqlParameter("@ShippedDate", order.ShipperDate.HasValue ? order.ShipperDate.Value.ToString("yyyy/MM/dd") : ""));
                     command.Parameters.Add(new SqlParameter("@ShipperID", order.ShipperID));
                     command.Parameters.Add(new SqlParameter("@Freight", order.Freight));
                     command.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
                     command.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
                     command.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
                     command.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion ?? ""));
-                    command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey ?? ""));                    
+                    command.Parameters.Add(new SqlParameter("@ShipPostalCode", order.CitShipPostalCodey ?? ""));
                     command.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
                     conn.Open();///資料庫開始
 
@@ -133,7 +134,9 @@ namespace Work2.Models.Services
                     for (int i = 0; i < order.OrderDetail.Count; i++)
                     {
                         if (order.OrderDetail[i].ProductID == 0)
+                        {
                             continue;
+                        }
                         detailcommand.Parameters.Add(new SqlParameter("@OrderID", orderid));
                         detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
                         detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));
@@ -142,8 +145,9 @@ namespace Work2.Models.Services
                         detailcommand.ExecuteScalar();
                         detailcommand.Parameters.Clear();
                     }
+                    message = "新增失敗";
                     scope.Complete();
-                    scope.Dispose();
+                    message = "新增成功";
 
 
                 }
@@ -156,7 +160,9 @@ namespace Work2.Models.Services
             {
                 conn.Close(); ///資料庫關閉
             }
+            return message;
         }
+
         /// <summary>
         /// 修改訂單
         /// </summary>
