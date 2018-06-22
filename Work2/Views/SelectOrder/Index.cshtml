@@ -13,7 +13,7 @@
             <td>@Html.LabelFor(model => model.CompanyName)</td>
             <td>@Html.TextBoxFor(model => model.CompanyName, new { htmlAttributes = new { @class = "k-textbox " } })</td>
         </tr>
-        <tr>
+        <tr> 
             <td>@Html.LabelFor(model => model.EmployeeID)</td>
             <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, "請選擇...")</td>
         </tr>
