@@ -51,8 +51,16 @@ namespace Work2.Controllers
         [HttpPost]
         public JsonResult InsertOrder(Order arg)
         {
-            OrderService orderService = new OrderService();
-            string message = orderService.InsertOrder(arg);
+            string message = "";
+            if (arg.OrderDetail != null)
+            {
+                OrderService orderService = new OrderService();
+                message = orderService.InsertOrder(arg);
+            }
+            else
+            {
+                message = "未填寫商品明細";
+            }
             return this.Json(message);
         }
         /// <summary>

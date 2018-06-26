@@ -72,7 +72,7 @@
     </table>
     <a class="k-button" id="insert">
         <span class="k-icon k-i-save"></span> 存檔
-    </a>    
+    </a>
     <a class='k-button' id="insert" href="/SelectOrder/Index">回上一頁 </a>
     <h3>訂單明細:</h3>
     <div id="detailgrid"></div>
@@ -206,7 +206,7 @@
         $(".dateValidator").kendoValidator({
             rules: {
                 customRule1: function (input) {
-                    if (input.is("[name='RequiredDate']") && $("[name='RequiredDate']").val() != " ") {
+                    if (input.is("[name='RequiredDate']") && $("[name='RequiredDate']").val() != "" && $("[name='OrderDate']").val() != "") {
                         var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
                         var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < RequiredDate.getTime();
@@ -214,7 +214,7 @@
                     return true;
                 },
                 customRule2: function (input) {
-                    if (input.is("[name='ShipperDate']") && $("[name='ShipperDate']").val() != " ") {
+                    if (input.is("[name='ShipperDate']") && $("[name='ShipperDate']").val() != "" && $("[name='OrderDate']").val() != "") {
                         var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
                         var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < ShipperDate.getTime();
@@ -222,11 +222,19 @@
                     return true;
                 },
                 customRule3: function (input) {
-                    if (input.is("[name='OrderDate']") && $("[name='OrderDate']").val() != " ") {
+                    if (input.is("[name='OrderDate']") && $("[name='OrderDate']").val() != "" && $("[name='ShipperDate']").val() != "" && $("[name='RequiredDate']").val() != "") {
                         var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
                         var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
                         var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
                         return OrderDate.getTime() < RequiredDate.getTime() || OrderDate.getTime() < ShipperDate.getTime();
+                    }
+                    return true;
+                },
+                customRule4: function (input) {
+                    if ((input.is("[name='ShipperDate']") || input.is("[name='RequiredDate']")) && $("[name='ShipperDate']").val() != "" && $("[name='RequiredDate']").val() != "") {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());                       
+                        return RequiredDate.getTime() > ShipperDate.getTime();
                     }
                     return true;
                 }
@@ -234,9 +242,10 @@
             },
 
             messages: {
-                customRule1: "訂單日期必須小於需要日期",
-                customRule2: "訂單日期必須小於發貨日期",
-                customRule3: "訂單日期必須小於需要或發貨日期",
+                customRule1: "需要日期必須大於訂單日期",
+                customRule2: "發貨日期必須大於訂單日期",
+                customRule3: "訂單日期必須小於需要和發貨日期",
+                customRule4: "需要日期必須大於發貨日期"
             }
 
         });

@@ -65,7 +65,7 @@ namespace Work2.Models
         /// 出貨公司名稱
         /// </summary>
         /// 
-        [DisplayName("出貨公司名稱")]
+        [DisplayName("出貨說明")]
         [Required]
         public string ShipName { get; set; }
         /// <summary>
