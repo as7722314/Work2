@@ -15,37 +15,37 @@
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.CustomerID)</td>
-        <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist)</td>
+        <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, new { @class = "dropdownlist" })</td>
 
         <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.EmployeeID)</td>
-        <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist)</td>
+        <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, new { @class = "dropdownlist"})</td>
         <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.OrderDate)</td>
-        <td>@Html.TextBoxFor(model => model.OrderDate, new { Value = Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "form-control" })</td>
+        <td>@Html.TextBoxFor(model => model.OrderDate, new { Value = Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
         <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.RequiredDate)</td>
-        <td>@Html.TextBoxFor(model => model.RequiredDate, new { Value = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "form-control" })</td>
+        <td>@Html.TextBoxFor(model => model.RequiredDate, new { Value = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
         <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.ShipperDate)</td>
-        <td>@Html.TextBoxFor(model => model.ShipperDate, new { Value = Model.ShipperDate.HasValue ? Model.ShipperDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "form-control" })</td>
+        <td>@Html.TextBoxFor(model => model.ShipperDate, new { Value = Model.ShipperDate.HasValue ? Model.ShipperDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
         <td>@Html.ValidationMessageFor(m => m.ShipperDate)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.ShipperID)</td>
-        <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperslist)</td>
+        <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.ShipName)</td>
-        <td>@Html.DropDownListFor(model => model.ShipName, (List<SelectListItem>)ViewBag.shipperslist)</td>
+        <td>@Html.DropDownListFor(model => model.ShipName, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(model => model.Freight)</td>
@@ -88,10 +88,12 @@
 
 
 <script type="text/javascript">
-    
+    $(".dropdownlist").kendoDropDownList();
+    $(".dateValidator").kendoDatePicker();
+
     $(document).ready(function () {
         var Orderdetail = @Html.Raw(Json.Encode(Model.OrderDetail));
-        console.log(Orderdetail);
+        //console.log(Orderdetail);
         var data = [];
         $.each(Orderdetail, function (id, a) {
             //console.log(a);
@@ -104,6 +106,7 @@
         });
 
         var dataSrc = new kendo.data.DataSource({
+            data:data,
             schema: {
                 model: {
                     fields: {
@@ -118,11 +121,11 @@
                 [
                     { field: "Total", aggregate: "Sum" }
                 ],
-            //change: GetPrice,
+            change: GetPrice,
             pageSize: 10,
         });
         $("#detailtable").kendoGrid({
-            dataSource: data,            
+            dataSource: dataSrc,            
             pageable: true,
             scrollable: true,
             sortable: true,
@@ -133,7 +136,7 @@
                 { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID#" },
                 { field: "UnitPrice", title: "單價" },
                 { field: "Qty", title: "數量" },
-                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
+                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregate: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
                 { command: "destroy", title: " " }],
             editable: true
         });
@@ -152,6 +155,42 @@
                     }
                 }
             });
+        }
+        function GetPrice(e) {            
+            if (e.field == "ProductID") {
+                var model = e.items[0];
+                var temp;
+                $.ajax({
+                    type: "POST",
+                    data: { 'arg': e.items[0].ProductID.Value },
+                    dataType: 'json',
+                    url: '/SelectOrder/GetPrice',
+                    success: function (response) {
+                        temp = response;
+                        if (temp !== model.UnitPrice) {
+                            model.UnitPrice = temp
+                            model.Total = temp * e.items[0].Qty;
+                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
+                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
+                            $("#detailgrid").data('kendoGrid').refresh();
+                            dataSrc.sync();
+                        }
+                    },
+                    error: function (result) {
+                        console.log("失敗");
+                    }
+                });
+            } else if (e.field == "Qty") {
+                var model = e.items[0];
+                var temp;
+                if (temp !== model.Total) {
+                    temp = Math.round(e.items[0].UnitPrice * e.items[0].Qty);
+                    model.Total = temp;
+                    $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
+                    $("#detailgrid").data('kendoGrid').refresh();
+                    dataSrc.sync();
+                }
+            }
         }
 
         

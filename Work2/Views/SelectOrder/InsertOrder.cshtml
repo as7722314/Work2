@@ -133,7 +133,7 @@
                 { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
                 { field: "UnitPrice", title: "單價" },
                 { field: "Qty", title: "數量" },
-                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
+                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty)#", aggregates: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
                 { command: "destroy", title: " " }],
             editable: true
         });
