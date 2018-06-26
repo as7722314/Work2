@@ -79,7 +79,7 @@
     </tr>
 </table>
 <a class='k-button' id="save">存檔<span class='k-icon k-i-search'></span></a>
-<a class='k-button' id="delete" href="">刪除本筆訂單</a>
+<a class='k-button' id="delete" >刪除本筆訂單</a>
 <a class='k-button' href="/SelectOrder/Index">回查詢頁</a>
 
 <div id="detailtable"></div>
@@ -91,7 +91,30 @@
     $(".dropdownlist").kendoDropDownList();
     $(".dateValidator").kendoDatePicker();
 
+
+    
+
+
+
     $(document).ready(function () {
+
+        $("#delete").click(function () {
+            $.ajax({
+                type: 'Post',
+                url: '/SelectOrder/Del',
+                data: { 'OrderID': $('#OrderID').val() },
+                datatype: 'json',
+                success: function (response) {
+                    alert(response);
+                    window.location.href = '/SelectOrder/Index';
+                },
+                error: function (error) {
+
+                }
+            });
+
+        });
+
         var Orderdetail = @Html.Raw(Json.Encode(Model.OrderDetail));
         //console.log(Orderdetail);
         var data = [];
@@ -125,7 +148,8 @@
             pageSize: 10,
         });
         $("#detailtable").kendoGrid({
-            dataSource: dataSrc,            
+            dataSource: dataSrc,      
+            
             pageable: true,
             scrollable: true,
             sortable: true,

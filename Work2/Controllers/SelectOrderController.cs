@@ -29,12 +29,13 @@ namespace Work2.Controllers
             return Json(orderService.GetOrderCondition(arg), JsonRequestBehavior.AllowGet);
 
         }
-        [HttpGet]
-        public ActionResult Del(int orderid)
+        [HttpPost]
+        public JsonResult Del(int orderid)
         {
             OrderService orderService = new OrderService();
-            orderService.Del(orderid);
-            return RedirectToAction("Index", "SelectOrder");
+            string messagebox = orderService.Del(orderid);
+            return this.Json(messagebox);
+            
         }
         [HttpGet]
         public ActionResult InsertOrder()
