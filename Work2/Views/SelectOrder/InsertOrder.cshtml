@@ -256,8 +256,10 @@
                 var displayedData = $("#detailgrid").data().kendoGrid.dataSource.view();
                 var detaildata = [];
                 $.each(displayedData, function (id, a) {
+                    //console.log(a.ProductID.Value);
+                    //console.log(a.ProductID.Text);
                     detaildata.push({
-                        'ProductID': a.ProductID.Value,
+                        'ProductID': [{ 'Value': a.ProductID.Value, 'Text': a.ProductID.Text }],
                         'UnitPrice': a.UnitPrice,
                         'Qty': a.Qty
                     });
@@ -278,7 +280,7 @@
                         'ShipAddress': $('#ShipAddress').val(),
                         'ShipCity': $('#ShipCity').val(),
                         'ShipRegion': $('#ShipRegion').val(),
-                        'ShipPostalCode': $('#ShipPostalCode').val(),
+                        'CitShipPostalCodey': $('#CitShipPostalCodey').val(),
                         'ShipCountry': $('#ShipCountry').val(),
                     },
                     datatype: 'json',

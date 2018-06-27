@@ -29,13 +29,21 @@ namespace Work2.Controllers
             return Json(orderService.GetOrderCondition(arg), JsonRequestBehavior.AllowGet);
 
         }
+        [HttpGet]
+        public ActionResult Delete(int orderid)
+        {
+            OrderService orderService = new OrderService();
+            orderService.Del(orderid);
+            return RedirectToAction("Index", "SelectOrder");
+
+        }
         [HttpPost]
         public JsonResult Del(int orderid)
         {
             OrderService orderService = new OrderService();
             string messagebox = orderService.Del(orderid);
             return this.Json(messagebox);
-            
+
         }
         [HttpGet]
         public ActionResult InsertOrder()
@@ -97,33 +105,12 @@ namespace Work2.Controllers
 
         }
         [HttpPost]
-        public ActionResult Update(Order arg)
-        {
-            if (ModelState.IsValid)
-            {
-                ModelState.Clear();
-                OrderService orderService = new OrderService();
-                orderService.Update(arg);
-                return RedirectToAction("Index", "SelectOrder");
-            }
-            else
-            {   ///獲得訂單資料
-                OrderService orderService = new OrderService();
+        public JsonResult Update(Order arg)        {
 
-                ///準備員工下拉式選單           
-                EmployeeService employeeservice = new EmployeeService();
-                List<SelectListItem> employeeitems = employeeservice.GetEnameList();
-                ViewBag.employeelist = employeeitems;
-                ///準備物流下拉式選單
-                ShipperService shippersservice = new ShipperService();
-                List<SelectListItem> shippersitems = shippersservice.GetSnameList();
-                ViewBag.shipperslist = shippersitems;
-                ///準備員工下拉式選單
-                CustomerService customerservice = new CustomerService();
-                List<SelectListItem> customeritems = customerservice.GetCustomerList();
-                ViewBag.customerlist = customeritems;
-                return View();
-            }
+            OrderService orderService = new OrderService();
+            string message = orderService.Update(arg);
+            return this.Json(message);
+
         }
         [HttpGet]
         public JsonResult InsertProduct()
@@ -138,6 +125,6 @@ namespace Work2.Controllers
             string result = orderService.GetUnitPrice(arg);///取得Price
             return this.Json(result, JsonRequestBehavior.AllowGet);
         }
-        
+
     }
 }

@@ -133,12 +133,9 @@ namespace Work2.Models.Services
                     SqlCommand detailcommand = new SqlCommand(detailsql, conn);
                     for (int i = 0; i < order.OrderDetail.Count; i++)
                     {
-                        if (order.OrderDetail[i].ProductID == 0)
-                        {
-                            continue;
-                        }
+                        
                         detailcommand.Parameters.Add(new SqlParameter("@OrderID", orderid));
-                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
+                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID[0].Value));
                         detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));
                         detailcommand.Parameters.Add(new SqlParameter("@Qty", order.OrderDetail[i].Qty));
                         detailcommand.Parameters.Add(new SqlParameter("@Discount", "0"));
@@ -167,8 +164,9 @@ namespace Work2.Models.Services
         /// 修改訂單
         /// </summary>
         /// <param name="order"></param>
-        public void Update(Order order)
+        public string Update(Order order)
         {
+            string message = "";
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
             try
@@ -250,15 +248,17 @@ namespace Work2.Models.Services
                     for (int i = 0; i < order.OrderDetail.Count; i++)
                     {
                         detailcommand.Parameters.Add(new SqlParameter("@OrderID", order.OrderID));
-                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID));
+                        detailcommand.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetail[i].ProductID[0].Value));
                         detailcommand.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetail[i].UnitPrice));
                         detailcommand.Parameters.Add(new SqlParameter("@Qty", order.OrderDetail[i].Qty));
                         detailcommand.Parameters.Add(new SqlParameter("@Discount", "0"));
                         detailcommand.ExecuteScalar();
                         detailcommand.Parameters.Clear();
-                    }                    
+                    }
+                    message = "修改失敗";
                     scope.Complete();
-                    scope.Dispose();
+                    message = "修改成功";
+
                 }
             }
             catch (Exception ex)
@@ -269,7 +269,7 @@ namespace Work2.Models.Services
             {
                 conn.Close(); ///資料庫關閉
             }
-
+            return message;
         }
         /// <summary>
         /// 條件式搜尋
@@ -419,27 +419,27 @@ namespace Work2.Models.Services
             String connStr = GetConnStr();
             SqlConnection conn = new SqlConnection(connStr);
 
-            String sql = @"Select sales.Orders.OrderID,
-                            CustomerID,
-                            EmployeeID,
-                            OrderDate,
-                            RequiredDate,
-                            ShippedDate,
-                            ShipperID,
-                            Freight,
-                            ShipName, 
-                            ShipAddress,
-                            ShipCity,
-                            ShipRegion,
-                            ShipPostalCode,
-                            ShipCountry,
-                            ProductID,
-                            UnitPrice,
-                            Qty,
-                            Discount
-                           from Sales.Orders join Sales.OrderDetails 
-                           on Sales.Orders.OrderID=Sales.OrderDetails.OrderID 
-                           where Sales.Orders.OrderID=@OrderID";
+            String sql = @"SELECT 
+                        Sales.Orders.OrderID,
+                        Sales.Orders.CustomerID,
+                        Sales.Orders.EmployeeID,
+                        Sales.Orders.OrderDate,
+                        Sales.Orders.RequiredDate,
+                        Sales.Orders.ShippedDate,
+                        Sales.Orders.ShipperID,
+                        Sales.Orders.Freight,
+                        Sales.Orders.ShipName,
+                        Sales.Orders.ShipAddress,
+                        Sales.Orders.ShipCity,
+                        Sales.Orders.ShipRegion,
+                        Sales.Orders.ShipPostalCode,
+                        Sales.Orders.ShipCountry,
+                        Sales.OrderDetails.ProductID,
+                        Sales.OrderDetails.UnitPrice,
+                        Sales.OrderDetails.Qty,
+						ProductName
+                        FROM Sales.Orders join Sales.OrderDetails  on Sales.Orders.OrderID = Sales.OrderDetails.OrderID join Production.Products as c on Sales.OrderDetails.ProductID = c.ProductID
+                        Where Sales.Orders.OrderID = @OrderID";
             SqlCommand command = new SqlCommand(sql, conn);
             command.Parameters.Add(new SqlParameter("@OrderID", orderid));
             SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
@@ -448,15 +448,22 @@ namespace Work2.Models.Services
             DataTable dataTable = ds.Tables[0]; ///***
             List<OrderDetail> detail = new List<OrderDetail>();
             Order order = new Order();///加入orderDetail到Order
+            List<ProductList> Productdata = new List<ProductList>();
             foreach (DataRow i in ds.Tables[0].Rows)
             {
                 detail.Add(new OrderDetail
                 {
                     OrderID = Convert.ToInt32(i["OrderID"]),
-                    ProductID = Convert.ToInt32(i["ProductID"]),
+                    ProductID = new List<ProductList>() {
+                        new ProductList
+                        {
+                            Value = Convert.ToInt32(i["ProductID"]),
+                            Text = i["ProductName"].ToString()
+                        }
+                    },
                     UnitPrice = Convert.ToDecimal(i["UnitPrice"]),
                     Qty = Convert.ToInt32(i["Qty"]),
-                    Discount = Convert.ToDouble(i["Discount"])
+                    //Discount = Convert.ToDouble(i["Discount"])
                 });
                 order.OrderID = Convert.ToInt32(i["OrderID"]);
                 order.CustomerID = Convert.ToInt32(i["CustomerID"]);

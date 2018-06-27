@@ -6,82 +6,82 @@
 }
 
 
+<div id="divValidator2">
+    <table>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderID)</td>
+            <td>@Html.TextBoxFor(model => model.OrderID, new { Readonly = true, @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CustomerID)</td>
+            <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, new { @class = "dropdownlist" })</td>
 
-<table>
-    <tr>
-        <td>@Html.LabelFor(model => model.OrderID)</td>
-        <td>@Html.TextBoxFor(model => model.OrderID, new { Readonly = true, @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.OrderID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.CustomerID)</td>
-        <td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.customerlist, new { @class = "dropdownlist" })</td>
-
-        <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.EmployeeID)</td>
-        <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, new { @class = "dropdownlist"})</td>
-        <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.OrderDate)</td>
-        <td>@Html.TextBoxFor(model => model.OrderDate, new { Value = Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
-        <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.RequiredDate)</td>
-        <td>@Html.TextBoxFor(model => model.RequiredDate, new { Value = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
-        <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipperDate)</td>
-        <td>@Html.TextBoxFor(model => model.ShipperDate, new { Value = Model.ShipperDate.HasValue ? Model.ShipperDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipperDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipperID)</td>
-        <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipName)</td>
-        <td>@Html.DropDownListFor(model => model.ShipName, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.Freight)</td>
-        <td>@Html.TextBoxFor(model => model.Freight, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.Freight)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipCountry)</td>
-        <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipCity)</td>
-        <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipRegion)</td>
-        <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipRegion)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
-        <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.CitShipPostalCodey)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(model => model.ShipAddress)</td>
-        <td>@Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })</td>
-        <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
-    </tr>
-</table>
-<a class='k-button' id="save">存檔<span class='k-icon k-i-search'></span></a>
-<a class='k-button' id="delete" >刪除本筆訂單</a>
-<a class='k-button' href="/SelectOrder/Index">回查詢頁</a>
-
+            <td>@Html.ValidationMessageFor(m => m.CustomerID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.EmployeeID)</td>
+            <td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.employeelist, new { @class = "dropdownlist" })</td>
+            <td>@Html.ValidationMessageFor(m => m.EmployeeID)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.OrderDate)</td>
+            <td>@Html.TextBoxFor(model => model.OrderDate, new { Value = Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.RequiredDate)</td>
+            <td>@Html.TextBoxFor(model => model.RequiredDate, new { Value = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
+            <td>@Html.ValidationMessageFor(m => m.RequiredDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperDate)</td>
+            <td>@Html.TextBoxFor(model => model.ShipperDate, new { Value = Model.ShipperDate.HasValue ? Model.ShipperDate.Value.ToString("yyyy-MM-dd") : "", type = "date", @class = "dateValidator " })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipperDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipperID)</td>
+            <td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipName)</td>
+            <td>@Html.DropDownListFor(model => model.ShipName, (List<SelectListItem>)ViewBag.shipperslist, new { @class = "dropdownlist" })</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.Freight)</td>
+            <td>@Html.TextBoxFor(model => model.Freight, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Freight)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCountry)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCountry)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipCity)</td>
+            <td>@Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipCity)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipRegion)</td>
+            <td>@Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipRegion)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.CitShipPostalCodey)</td>
+            <td>@Html.TextBoxFor(model => model.CitShipPostalCodey, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CitShipPostalCodey)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ShipAddress)</td>
+            <td>@Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShipAddress)</td>
+        </tr>
+    </table>
+    <a class='k-button' id="save">存檔<span class='k-icon k-i-search'></span></a>
+    <a class='k-button' id="delete">刪除本筆訂單</a>
+    <a class='k-button' href="/SelectOrder/Index">回查詢頁</a>
+</div>
 <div id="detailtable"></div>
 
 
@@ -90,13 +90,58 @@
 <script type="text/javascript">
     $(".dropdownlist").kendoDropDownList();
     $(".dateValidator").kendoDatePicker();
-
-
-    
-
-
-
     $(document).ready(function () {
+        var validator = $("#divValidator2").kendoValidator().data("kendoValidator");///基本驗證
+        $("#save").click(function () {
+            if (validator.validate()) {
+                var displayedData = $("#detailtable").data().kendoGrid.dataSource.view();
+                var detaildata = [];
+                $.each(displayedData, function (id, a) {
+                    //console.log(a.ProductID.Value);
+                    //console.log(a.ProductID.Text);
+                    detaildata.push({
+                        'ProductID': [{ 'Value': a.ProductID.Value}],
+                        'UnitPrice': a.UnitPrice,
+                        'Qty': a.Qty
+                    });
+                });
+                $.ajax({
+                    type: 'Post',
+                    url: '/SelectOrder/Update',
+                    data: {
+                        'OrderDetail': detaildata,
+                        'OrderID': $("#OrderID").val(),
+                        'CustomerID': $('#CustomerID').val(),
+                        'EmployeeID': $('#EmployeeID').val(),
+                        'OrderDate': $('#OrderDate').val(),
+                        'RequiredDate': $('#RequiredDate').val(),
+                        'ShipperDate': $('#ShipperDate').val(),
+                        'ShipperID': $('#ShipperID').val(),
+                        'Freight': $('#Freight').val(),
+                        'ShipName': $('#ShipName').val(),
+                        'ShipAddress': $('#ShipAddress').val(),
+                        'ShipCity': $('#ShipCity').val(),
+                        'ShipRegion': $('#ShipRegion').val(),
+                        'CitShipPostalCodey': $('#CitShipPostalCodey').val(),
+                        'ShipCountry': $('#ShipCountry').val(),
+                    },
+                    datatype: 'json',
+                    success: function (response) {
+                        alert(response);
+                        window.location.href = '/SelectOrder/Index';
+                        
+                    }, error: function (error) {
+
+                    }
+                });
+            }
+
+            /*
+            alert("功能未寫");
+            return false;
+            */
+        });
+
 
         $("#delete").click(function () {
             $.ajax({
@@ -121,7 +166,7 @@
         $.each(Orderdetail, function (id, a) {
             //console.log(a);
             data.push({
-                'ProductID': a.ProductID,
+                'ProductID': { 'Value': a.ProductID[0].Value, 'Text': a.ProductID[0].Text },
                 'UnitPrice': a.UnitPrice,
                 'Qty': a.Qty,
                 'Total': a.UnitPrice * a.Qty
@@ -129,13 +174,35 @@
         });
 
         var dataSrc = new kendo.data.DataSource({
-            data:data,
+            data: data,
             schema: {
                 model: {
                     fields: {
-                        ProductID: {validation: {required: true} },
-                        UnitPrice: { type: "number", editable: false},
-                        Qty: { type: "number", validation: { required: true, min: 1 } },
+                        ProductID: {
+                            defaultValue: { 'Value': 58, 'Text': "Product ACRVI" },
+                            validation: {
+                                required: true,
+                                productvalidation: function (input) {
+                                    input.attr("data-productvalidation-msg", "商品重複");
+                                    if (input.is("[name='ProductID']") && input.val() != "") {
+                                        var displayedData = $("#detailtable").data().kendoGrid.dataSource.view();
+                                        var checked = true;
+
+                                        $.each(displayedData, function (id, a) {
+                                            if (id != 0 && input.val() == a.ProductID.Value) {
+                                                checked = false;
+                                            }
+                                        });
+                                        return checked;
+                                        //console.log(displayedData[0].ProductID.Value);
+                                    }
+                                    return true;
+                                }
+
+                            }
+                        },
+                        UnitPrice: { type: "number", editable: false, defaultValue: 13.25},
+                        Qty: { type: "number", validation: { required: true, min: 1 }, defaultValue: 1},
                         Total: { type: "number", editable: false}
                     }
                 }
@@ -148,8 +215,8 @@
             pageSize: 10,
         });
         $("#detailtable").kendoGrid({
-            dataSource: dataSrc,      
-            
+            dataSource: dataSrc,
+
             pageable: true,
             scrollable: true,
             sortable: true,
@@ -157,10 +224,10 @@
             filterable: true,
             toolbar: ["create"],
             columns: [
-                { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID#" },
+                { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
                 { field: "UnitPrice", title: "單價" },
                 { field: "Qty", title: "數量" },
-                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty,'C0')#", aggregate: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
+                { field: "Total", title: "小計", template: "#=kendo.toString(UnitPrice*Qty)#", aggregate: ["Sum"], footerTemplate: "總計:" + "#=kendo.toString(Sum,'C0')#" },
                 { command: "destroy", title: " " }],
             editable: true
         });
@@ -180,8 +247,10 @@
                 }
             });
         }
-        function GetPrice(e) {            
+        function GetPrice(e) {
+            console.log(e.field);
             if (e.field == "ProductID") {
+                //console.log(e.items[0].ProductID.Value);
                 var model = e.items[0];
                 var temp;
                 $.ajax({
@@ -194,9 +263,9 @@
                         if (temp !== model.UnitPrice) {
                             model.UnitPrice = temp
                             model.Total = temp * e.items[0].Qty;
-                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
-                            $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
-                            $("#detailgrid").data('kendoGrid').refresh();
+                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
+                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
+                            $("#detailtable").data('kendoGrid').refresh();
                             dataSrc.sync();
                         }
                     },
@@ -210,14 +279,60 @@
                 if (temp !== model.Total) {
                     temp = Math.round(e.items[0].UnitPrice * e.items[0].Qty);
                     model.Total = temp;
-                    $("#detailgrid").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
-                    $("#detailgrid").data('kendoGrid').refresh();
+                    $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
+                    $("#detailtable").data('kendoGrid').refresh();
                     dataSrc.sync();
                 }
             }
         }
 
-        
+        $(".dateValidator").kendoValidator({
+            rules: {
+                customRule1: function (input) {
+                    if (input.is("[name='RequiredDate']") && $("[name='RequiredDate']").val() != "" && $("[name='OrderDate']").val() != "") {
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
+                        return OrderDate.getTime() < RequiredDate.getTime();
+                    }
+                    return true;
+                },
+                customRule2: function (input) {
+                    if (input.is("[name='ShipperDate']") && $("[name='ShipperDate']").val() != "" && $("[name='OrderDate']").val() != "") {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
+                        return OrderDate.getTime() < ShipperDate.getTime();
+                    }
+                    return true;
+                },
+                customRule3: function (input) {
+                    if (input.is("[name='OrderDate']") && $("[name='OrderDate']").val() != "" && $("[name='ShipperDate']").val() != "" && $("[name='RequiredDate']").val() != "") {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
+                        var OrderDate = kendo.parseDate($("[name='OrderDate']").val());
+                        return OrderDate.getTime() < RequiredDate.getTime() || OrderDate.getTime() < ShipperDate.getTime();
+                    }
+                    return true;
+                },
+                customRule4: function (input) {
+                    if ((input.is("[name='ShipperDate']") || input.is("[name='RequiredDate']")) && $("[name='ShipperDate']").val() != "" && $("[name='RequiredDate']").val() != "") {
+                        var ShipperDate = kendo.parseDate($("[name='ShipperDate']").val());
+                        var RequiredDate = kendo.parseDate($("[name='RequiredDate']").val());
+                        return RequiredDate.getTime() > ShipperDate.getTime();
+                    }
+                    return true;
+                }
+
+            },
+
+            messages: {
+                customRule1: "需要日期必須大於訂單日期",
+                customRule2: "發貨日期必須大於訂單日期",
+                customRule3: "訂單日期必須小於需要和發貨日期",
+                customRule4: "需要日期必須大於發貨日期"
+            }
+
+        });
+
     });
 
 </script>
