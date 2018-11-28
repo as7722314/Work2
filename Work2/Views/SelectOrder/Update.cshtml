@@ -249,22 +249,22 @@
         }
         function GetPrice(e) {
             console.log(e.field);
-            if (e.field == "ProductID") {
+            if (e.field == "ProductID") { //當產品被選擇時
                 //console.log(e.items[0].ProductID.Value);
                 var model = e.items[0];
                 var temp;
                 $.ajax({
                     type: "POST",
-                    data: { 'arg': e.items[0].ProductID.Value },
+                    data: { 'arg': e.items[0].ProductID.Value }, //arg = 產品的ID
                     dataType: 'json',
-                    url: '/SelectOrder/GetPrice',
+                    url: '/SelectOrder/GetPrice', 
                     success: function (response) {
                         temp = response;
                         if (temp !== model.UnitPrice) {
                             model.UnitPrice = temp
-                            model.Total = temp * e.items[0].Qty;
-                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp);
-                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);
+                            model.Total = temp * e.items[0].Qty; //計算總金額
+                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(1)").text(temp); //在網頁上找到位置並放上值(價格)
+                            $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(model.Total);//在網頁上找到位置並放上值(總金額)
                             $("#detailtable").data('kendoGrid').refresh();
                             dataSrc.sync();
                         }
@@ -273,20 +273,20 @@
                         console.log("失敗");
                     }
                 });
-            } else if (e.field == "Qty") {
+            } else if (e.field == "Qty") { //當數量被觸及時
                 var model = e.items[0];
                 var temp;
                 if (temp !== model.Total) {
-                    temp = Math.round(e.items[0].UnitPrice * e.items[0].Qty);
+                    temp = Math.round(e.items[0].UnitPrice * e.items[0].Qty); //計算總金額
                     model.Total = temp;
-                    $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp);
+                    $("#detailtable").find("tr[data-uid='" + model.uid + "'] td:eq(3)").text(temp); // 找到網頁上位置並給值
                     $("#detailtable").data('kendoGrid').refresh();
                     dataSrc.sync();
                 }
             }
         }
 
-        $(".dateValidator").kendoValidator({
+        $(".dateValidator").kendoValidator({ //kundo 驗證
             rules: {
                 customRule1: function (input) {
                     if (input.is("[name='RequiredDate']") && $("[name='RequiredDate']").val() != "" && $("[name='OrderDate']").val() != "") {
