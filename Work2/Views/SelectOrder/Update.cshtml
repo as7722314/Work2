@@ -182,13 +182,13 @@
                             defaultValue: { 'Value': 58, 'Text': "Product ACRVI" },
                             validation: {
                                 required: true,
-                                productvalidation: function (input) {
+                                productvalidation: function (input) { //產品的驗證方式
                                     input.attr("data-productvalidation-msg", "商品重複");
                                     if (input.is("[name='ProductID']") && input.val() != "") {
                                         var displayedData = $("#detailtable").data().kendoGrid.dataSource.view();
                                         var checked = true;
 
-                                        $.each(displayedData, function (id, a) {
+                                        $.each(displayedData, function (id, a) { //迴圈概念尋找是否有重複的ID
                                             if (id != 0 && input.val() == a.ProductID.Value) {
                                                 checked = false;
                                             }
@@ -223,6 +223,7 @@
             selectable: true,
             filterable: true,
             toolbar: ["create"],
+            //設定欄位(以下)
             columns: [
                 { field: "ProductID", title: "商品", editor: categoryDropDownEditor, template: "#=ProductID.Text#" },
                 { field: "UnitPrice", title: "單價" },
